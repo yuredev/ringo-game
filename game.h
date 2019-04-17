@@ -22,6 +22,7 @@
 #define FUNDOAZUL "\033[44m"
 #define FUNDOVERDE "\033[1;42m"
 #define AMARELO "\033[33m"
+#define ROXO "\033[1;35m"
 
 typedef unsigned char uchar;
 
@@ -54,54 +55,69 @@ void writeLine(uchar tam)
 	printf("\n");	
 }
 
-agente acaoJogador(char direcao, agente jogador, char cenario[25][25])
+agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o jogador no cenario
 {
-	switch(direcao)
+	if(cenario[jogador.linha][jogador.coluna] == 't')	// teletransporte
 	{
-		case 'W':
-			direcao = 'w';
-			break;	
-		case 'w':
-			direcao = 'w';
-			break;	
-		case 'A':
-			direcao = 'a';
-			break;		
-		case 'a':
-			direcao = 'a';
-			break;	
-		case 'D':
-			direcao = 'd';
-			break;	
-		case 'd':
-			direcao = 'd';
-			break;	
-		case 'S':
-			direcao = 's';
-			break;		
-		case 's':
-			direcao = 's';
-			break;		
+		if(jogador.linha < 5)
+		{
+			jogador.linha = 23;
+			jogador.coluna = 12;
+		}
+		else 
+		{
+			jogador.linha = 0;
+			jogador.coluna = 23;
+		}
 	}
-	
-	switch(direcao)
+	else
 	{
-		case 'w':
-			if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p')		// o jogador só mexe se a próxima casa não houver paredes
-				jogador.linha--;
-			break;	
-		case 'a':
-			if(jogador.coluna > 0 && cenario[jogador.linha][jogador.coluna - 1] != 'p')
-				jogador.coluna--;
-			break;	
-		case 'd':
-			if(jogador.coluna < 24 && cenario[jogador.linha][jogador.coluna + 1] != 'p')
-				jogador.coluna++;
-			break;	
-		case 's':
-			if(jogador.linha < 24 && cenario[jogador.linha + 1][jogador.coluna] != 'p')
-				jogador.linha++;
-			break;		
+		switch(direcao)
+		{
+			case 'W':
+				direcao = 'w';
+				break;	
+			case 'w':
+				direcao = 'w';
+				break;	
+			case 'A':
+				direcao = 'a';
+				break;		
+			case 'a':
+				direcao = 'a';
+				break;	
+			case 'D':
+				direcao = 'd';
+				break;	
+			case 'd':
+				direcao = 'd';
+				break;	
+			case 'S':
+				direcao = 's';
+				break;		
+			case 's':
+				direcao = 's';
+				break;		
+		}
+		switch(direcao)
+		{
+			case 'w':
+				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p')		// o jogador só mexe se a próxima casa não houver paredes
+					jogador.linha--;
+				break;	
+			case 'a':
+				if(jogador.coluna > 0 && cenario[jogador.linha][jogador.coluna - 1] != 'p')
+					jogador.coluna--;
+				break;	
+			case 'd':
+				if(jogador.coluna < 24 && cenario[jogador.linha][jogador.coluna + 1] != 'p')
+					jogador.coluna++;
+				break;	
+			case 's':
+				if(jogador.linha < 24 && cenario[jogador.linha + 1][jogador.coluna] != 'p')
+					jogador.linha++;
+				break;		
+		}	
 	}
 	return jogador;	
 }
@@ -137,9 +153,14 @@ agente resetarPosicoes(agente x, uchar rodada)		// metodo que reseta posicoes do
 		case 3:
 			if(!strcmp(x.categoria, "inimigo"))
 			{
-				x.linha = 3;
+				x.linha = 11;
+				x.coluna = 12;
 			}
 			else
+			{
+				x.coluna = 0;
+				x.linha = 22;
+			}
 			break;
 		case 4:
 			//if(!strcmp(x.categoria, "inimigo"))
@@ -159,7 +180,7 @@ agente resetarPosicoes(agente x, uchar rodada)		// metodo que reseta posicoes do
 	return x;
 }
 
-void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente inimigo2)
+void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo)		// mostra a tela de jogo 
 {
 	uchar i,j;
 	printf("\n\n\t");
@@ -179,6 +200,8 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 				printf("%c%c", 178,178);		
 			else if(cenario[i][j] == 'c')					//mostrar pontos
 				printf(AMARELO "* " CINZA);	
+			else if(cenario[i][j] == 't')					//mostrar teletransporte
+				printf(ROXO "%c%c" CINZA,178,178);	
 		}
 		printf("%c",219);							// limite do cenário, parede do fim
 		printf("\n");
@@ -188,7 +211,7 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 	printf("\n\t");						
 }
 
-bool wasTouched(agente jogador, agente inimigo)
+bool wasTouched(agente jogador, agente inimigo)	// verifica se o jogador tocou no inimigo 
 {
 	bool touch = false; 
 	if(jogador.linha == inimigo.linha && jogador.coluna == inimigo.coluna)
@@ -196,23 +219,29 @@ bool wasTouched(agente jogador, agente inimigo)
 	return touch;
 }
 
-void montarCenario(uchar rodada, char cenario[25][25], agente jogador)
+void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])
+{
+	for(; inicioParede <= fimParede; inicioParede++)
+		cenario[linha][inicioParede] = 'p';
+}
+
+void montarCenario(uchar rodada, char cenario[25][25], agente jogador)	// monta o cenario de jogo de acordo com a rodada  
 {
 	uchar i,j;
-	for(i = 0; i < 25; i++)
+	uchar limite;					// usada para construir o cenario da rodada 2
+	for(i = 0; i < 25; i++)			// zerar cenario para construir o novo 
 		for(j = 0; j < 25; j++)
 			cenario[i][j] = '0';
-	switch(rodada)
+	switch(rodada)					// Definine localização das paredes
 	{
 		case 1:
 			for(j = 2; j < 23; j+=2)
 				cenario[4][j] = 'p';
-			for(j = 2; j < 13; j++)
-				cenario[7][j] = 'p';
-			for(j = 14; j < 24; j++)
-				cenario[10][j] = 'p';
-			for(j = 2; j < 13; j++)
-				cenario[13][j] = 'p';	
+					
+			fazerParede(7,2,12,cenario);	
+			fazerParede(10, 14, 23, cenario);
+			fazerParede(13, 2, 12, cenario);		
+			
 			for(j = 4; j < 19; j+=4)
 				cenario[15][j] = 'p';
 			for(j = 1; j < 11; j+=1)
@@ -223,7 +252,7 @@ void montarCenario(uchar rodada, char cenario[25][25], agente jogador)
 				cenario[21][j] = 'p';				
 			break;	
 		case 2:
-			for(j = 1; j < 24; j++)   // Definine localização das paredes
+			for(j = 1; j < 24; j++)   
 			{
 				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
@@ -233,21 +262,60 @@ void montarCenario(uchar rodada, char cenario[25][25], agente jogador)
 				else 
 					cenario[12][j] = 'p';					
 			}
-			for(j = 2; j < 13; j++)
-				cenario[3][j] = 'p';	
-			for(j = 14; j < 24; j++)
-				cenario[5][j] = 'p';	
-			for(j = 2; j < 13; j++)
-				cenario[7][j] = 'p';		
-			for(j = 14; j < 24; j++)
-				cenario[18][j] = 'p';
-			for(j = 2; j < 13; j++)
-				cenario[20][j] = 'p';	
-			for(j = 14; j < 24; j++)
-				cenario[22][j] = 'p';	
+			fazerParede(3, 2, 12, cenario);
+			fazerParede(5, 14, 23, cenario);
+			fazerParede(7, 2, 12, cenario);
+			fazerParede(18, 14, 23, cenario);	
+			fazerParede(20, 2, 12, cenario);	
+			fazerParede(22, 14, 23, cenario);	
 			break;	
 		case 3:
-		
+			cenario[0][24] = 't';
+			cenario[1][24] = 't';
+			fazerParede(24, 0, 24, cenario);
+			cenario[24][11] = 't';
+			cenario[24][12] = 't';	
+			cenario[24][13] = 't';
+			j = 2; 
+			limite = 4;
+			for(i = 0; i < 8; i++)
+			{
+				for(; j < limite; j++)
+					cenario[2][j] = 'p';
+				j++;
+				limite+=3;
+			}
+			j = 1; 
+			limite = 3;
+			for(i = 0; i < 8; i++)
+			{
+				for(; j < limite; j++)
+					cenario[4][j] = 'p';
+				j++;
+				limite+=3;
+			}		
+			fazerParede(6, 0, 24, cenario);
+
+			for(j = 1; j < 24; j++)   
+			{
+				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
+				{							
+					cenario[16][j] = 'p';
+					cenario[20][j] = 'p';
+				}
+				else 
+					cenario[18][j] = 'p';					
+			}
+			fazerParede(14, 2, 23, cenario);
+			for(j = 1; j < 24; j++)   
+			{
+				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
+				{							
+					cenario[8][j] = 'p';
+				}
+				else 
+					cenario[10][j] = 'p';					
+			}
 			break;	
 		case 4:
 		
@@ -261,7 +329,7 @@ void montarCenario(uchar rodada, char cenario[25][25], agente jogador)
 	}		
 }
 
-int gerarPontos(char cenario[25][25], uchar rodada)
+int gerarPontos(char cenario[25][25], uchar rodada)		// gera os pontos da rodada 
 {
 	uchar qtdPontosRodada;
 	uchar i,j;
@@ -286,7 +354,7 @@ int gerarPontos(char cenario[25][25], uchar rodada)
 			break;	
 	}
 	
-	while(qtdPontos != qtdPontosRodada)
+	while(qtdPontos != qtdPontosRodada) // se a quantidade de pontos geradas nao for igual a quantidade da rodada, os pontos tem que ser gerados novamente. 
 	{
 		qtdPontos = 0;
 		for(i = 0; i < 25; i++)
@@ -305,7 +373,7 @@ int gerarPontos(char cenario[25][25], uchar rodada)
 	return qtdPontos;		
 }
 
-void animacaoDerrota()
+void animacaoDerrota()	
 {
 	uchar tempo = 100;
 	printf("\a");    

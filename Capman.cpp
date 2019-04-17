@@ -7,42 +7,46 @@
 
 int main()
 {
+	
 	SetConsoleTitle("*** C A P M A N ***");
 	char cenario[25][25];	
 	HWND hwnd = GetConsoleWindow();
 	if(hwnd != NULL) 
 		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
-	agente jogador, inimigo, inimigo2;
-	uchar espera = 70;
+	agente jogador, inimigo;
+	uchar espera = 40;
 	char direcao;
 	uchar qtdPontos = 50;
-	uchar rodada = 2;
-	bool pararJogo = false;
+	uchar rodada = 3;
+	bool continuarJogo = true;
 	strcpy(jogador.categoria, "jogador");
 	strcpy(inimigo.categoria, "inimigo");
-	strcpy(inimigo2.categoria, "inimigo2");
+	
 	do
 	{
 		direcao = 'z';				
 		jogador = resetarPosicoes(jogador, rodada);
 		inimigo = resetarPosicoes(inimigo, rodada);
-		if(rodada == 3)
-			inimigo2 = resetarPosicoes(inimigo2, rodada);
 		montarCenario(rodada, cenario, jogador);
 		qtdPontos = gerarPontos(cenario, rodada);
 		do
 		{	
 			system("cls");
-			if(cenario[jogador.linha][jogador.coluna] == 'c')
+			if(cenario[jogador.linha][jogador.coluna] == 'c')	// Retirar os pontos após captura
 			{
 				cenario[jogador.linha][jogador.coluna] = '0';
 				qtdPontos--;
 			}
+			if(cenario[jogador.linha][jogador.coluna] == 't')	// movimentação após teletransporte
+			{
+				if(jogador.linha < 5)
+					direcao = 'w';
+				else
+					direcao = 'a';	
+			}
 			printf("\n\tPontos restantes: %d",qtdPontos);
 			printf("\t\t\t    Rodada %d",rodada);
-			
-			mostrarJogo(cenario, jogador, inimigo, inimigo2);
-					
+			mostrarJogo(cenario, jogador, inimigo);
 			if(kbhit())
 				direcao = getch();			
 			jogador = acaoJogador(direcao, jogador, cenario);
@@ -68,21 +72,22 @@ int main()
 		switch(direcao)
 		{
 			case 'S':
-				pararJogo = false;
+				continuarJogo = true;
 				break;
 			case 's':
-				pararJogo = false;
+				continuarJogo = true;
 				break;
 			case 'N':
-				pararJogo = true;
+				continuarJogo = false;
 				break;
 			case 'n':
-				pararJogo = true;
+				continuarJogo = false;
 		}
-	}while(!pararJogo);
+	}while(continuarJogo);
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
-	Sleep(700);
-	system("taskkill /f /fi \"windowtitle eq LaunchCapman\"");
+	Sleep(500);
+	system("taskkill /f /fi \"windowtitle eq Manual\"");
+	system("pause");
 	return 0;
 }

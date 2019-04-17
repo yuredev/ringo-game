@@ -9,6 +9,7 @@ int main()
 	apresentacao();
 	printf("Pronto para jogar?\n");
 	system("pause");
+	SetConsoleTitle("MANUAL");
 	if(hwnd != NULL) 
 		MoveWindow(hwnd , 710, 50, 500, 600, TRUE); 
 	system("start capman.exe");
@@ -21,6 +22,8 @@ int main()
 	printf("%c" CINZA, 254);
 	printf("\n * Capture as moedas " AMARELO);
 	printf("*" CINZA);
+	printf("\n * Teletransporte " ROXO);
+	printf("%c\n\n" CINZA,178);
 	getch();
 	return 0;
 }
