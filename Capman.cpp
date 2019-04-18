@@ -52,6 +52,7 @@ int main()
 			jogador = acaoJogador(direcao, jogador, cenario);
 			Sleep(espera);
 		}while(!wasTouched(jogador, inimigo) && qtdPontos > 0);
+		putchar('\a');
 		if(qtdPontos > 0)
 		{
 			animacaoDerrota();

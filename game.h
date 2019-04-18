@@ -153,8 +153,8 @@ agente resetarPosicoes(agente x, uchar rodada)		// metodo que reseta posicoes do
 		case 3:
 			if(!strcmp(x.categoria, "inimigo"))
 			{
-				x.linha = 11;
-				x.coluna = 12;
+				x.linha = 7;
+				x.coluna = 22;
 			}
 			else
 			{
@@ -190,7 +190,9 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo)		// mostr
 		printf("\t%c",219);									// limite do cenário, parede do ínicio
 		for(j = 0; j < 25; j++)
 		{
-			if(i == inimigo.linha && j == inimigo.coluna)	// mostrar inimigo 
+			if(cenario[i][j] == 't')					//mostrar teletransporte
+				printf(ROXO "%c%c" CINZA,178,178);	
+			else if(i == inimigo.linha && j == inimigo.coluna)	// mostrar inimigo 
 				printf(VERMELHO "%c " CINZA,254);
 			else if(i == jogador.linha && j == jogador.coluna)	// mostrar jogador 	
 				printf("%c ",254);							
@@ -200,8 +202,6 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo)		// mostr
 				printf("%c%c", 178,178);		
 			else if(cenario[i][j] == 'c')					//mostrar pontos
 				printf(AMARELO "* " CINZA);	
-			else if(cenario[i][j] == 't')					//mostrar teletransporte
-				printf(ROXO "%c%c" CINZA,178,178);	
 		}
 		printf("%c",219);							// limite do cenário, parede do fim
 		printf("\n");
@@ -295,26 +295,24 @@ void montarCenario(uchar rodada, char cenario[25][25], agente jogador)	// monta 
 				limite+=3;
 			}		
 			fazerParede(6, 0, 24, cenario);
-
 			for(j = 1; j < 24; j++)   
 			{
 				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
-					cenario[16][j] = 'p';
-					cenario[20][j] = 'p';
+					cenario[9][j] = 'p';
 				}
 				else 
-					cenario[18][j] = 'p';					
+					cenario[11][j] = 'p';					
 			}
 			fazerParede(14, 2, 23, cenario);
 			for(j = 1; j < 24; j++)   
 			{
 				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
-					cenario[8][j] = 'p';
+					cenario[19][j] = 'p';
 				}
 				else 
-					cenario[10][j] = 'p';					
+					cenario[17][j] = 'p';					
 			}
 			break;	
 		case 4:
@@ -375,8 +373,7 @@ int gerarPontos(char cenario[25][25], uchar rodada)		// gera os pontos da rodada
 
 void animacaoDerrota()	
 {
-	uchar tempo = 100;
-	printf("\a");    
+	uchar tempo = 100;    
 	printf("G");
 	Sleep(tempo);		 
 	printf("A");
@@ -405,7 +402,6 @@ void animacaoDerrota()
 void animacaoVitoria(uchar rodada)
 {
 	uchar tempo = 100;
-	printf("\a");    
 	printf("R");
 	Sleep(tempo);		 
 	printf("O");
