@@ -26,7 +26,7 @@
 
 typedef unsigned char uchar;
 
-struct agente
+struct agente		// estrutura do jogador e inimigo 
 {
 	int linha;
 	int coluna;
@@ -35,7 +35,7 @@ struct agente
 	char categoria[8];
 };   
 
-void apresentacao()
+void apresentacao()		// só estética
 {
 	system("color 0F");
 	printf( BRANCO FUNDOAZUL"\n"
@@ -47,7 +47,7 @@ void apresentacao()
 	
 	printf(" A game based in the popular Pacman developed for Atari  \n\n"CINZA FUNDOPRETO);
 }
-void writeLine(uchar tam)
+void writeLine(uchar tam)		// escreve uma linha
 {
 	uchar i;
 	for(i = 0; i < tam; i++)
@@ -59,7 +59,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o
 {
 	if(cenario[jogador.linha][jogador.coluna] == 't')	// teletransporte
 	{
-		if(jogador.linha < 5)
+		if(jogador.linha < 5)			// identificar qual porta de teletransporte
 		{
 			jogador.linha = 23;
 			jogador.coluna = 12;
@@ -72,37 +72,25 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o
 	}
 	else
 	{
-		switch(direcao)
+		switch(direcao)	// apenas para aceitar caps lock
 		{
 			case 'W':
-				direcao = 'w';
-				break;	
-			case 'w':
 				direcao = 'w';
 				break;	
 			case 'A':
 				direcao = 'a';
 				break;		
-			case 'a':
-				direcao = 'a';
-				break;	
 			case 'D':
-				direcao = 'd';
-				break;	
-			case 'd':
 				direcao = 'd';
 				break;	
 			case 'S':
 				direcao = 's';
-				break;		
-			case 's':
-				direcao = 's';
-				break;		
+				break;			
 		}
 		switch(direcao)
 		{
 			case 'w':
-				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p')		// o jogador só mexe se a próxima casa não houver paredes
+				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador só mexe se a próxima casa não houver paredes. isso se aplica aos outros cases
 					jogador.linha--;
 				break;	
 			case 'a':
@@ -122,9 +110,9 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o
 	return jogador;	
 }
 
-agente resetarPosicoes(agente x, uchar rodada)		// metodo que reseta posicoes do jogador ou do inimigo
+agente resetarPosicoes(agente x, uchar fase)		// metodo que reseta posicoes do jogador ou do inimigo. agente X é genérico
 {
-	switch(rodada)
+	switch(fase)
 	{
 		case 1:
 			if(!strcmp(x.categoria, "inimigo"))
@@ -200,7 +188,7 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo)		// mostr
 				printf("  ");
 			else if(cenario[i][j] == 'p')					// mostrar paredes
 				printf("%c%c", 178,178);		
-			else if(cenario[i][j] == 'c')					//mostrar pontos
+			else if(cenario[i][j] == 'm')					//mostrar moedas
 				printf(AMARELO "* " CINZA);	
 		}
 		printf("%c",219);							// limite do cenário, parede do fim
@@ -219,20 +207,20 @@ bool wasTouched(agente jogador, agente inimigo)	// verifica se o jogador tocou n
 	return touch;
 }
 
-void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])
+void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])	// constrói uma parede no cenário do jogo 
 {
 	for(; inicioParede <= fimParede; inicioParede++)
 		cenario[linha][inicioParede] = 'p';
 }
 
-void montarCenario(uchar rodada, char cenario[25][25], agente jogador)	// monta o cenario de jogo de acordo com a rodada  
+void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o cenario de jogo de acordo com a fase  
 {
 	uchar i,j;
-	uchar limite;					// usada para construir o cenario da rodada 2
+	uchar limite;					// usada para construir o cenario da fase 2
 	for(i = 0; i < 25; i++)			// zerar cenario para construir o novo 
 		for(j = 0; j < 25; j++)
 			cenario[i][j] = '0';
-	switch(rodada)					// Definine localização das paredes
+	switch(fase)					// monta as paredes do cenário de acordo com a fase 
 	{
 		case 1:
 			for(j = 2; j < 23; j+=2)
@@ -327,13 +315,13 @@ void montarCenario(uchar rodada, char cenario[25][25], agente jogador)	// monta 
 	}		
 }
 
-int gerarPontos(char cenario[25][25], uchar rodada)		// gera os pontos da rodada 
+int gerarPontos(char cenario[25][25], uchar rodada)		// gera os pontos da fase 
 {
 	uchar qtdPontosRodada;
 	uchar i,j;
 	uchar qtdPontos = 0;
 	srand(time(NULL));
-	switch(rodada)
+	switch(rodada)						// definir quantas moedas serão geradas de acordo com a fase
 	{
 		case 1:
 			qtdPontosRodada = 20;
@@ -352,26 +340,25 @@ int gerarPontos(char cenario[25][25], uchar rodada)		// gera os pontos da rodada
 			break;	
 	}
 	
-	while(qtdPontos != qtdPontosRodada) // se a quantidade de pontos geradas nao for igual a quantidade da rodada, os pontos tem que ser gerados novamente. 
+	while(qtdPontos != qtdPontosRodada) // se a quantidade de moedas geradas nao for igual a quantidade estaebelecida para a fase, as moedas tem que ser geradas novamente. 
 	{
 		qtdPontos = 0;
 		for(i = 0; i < 25; i++)
 			for(j = 0; j < 25; j++)
 			{
-				if(cenario[i][j] == 'c')
+				if(cenario[i][j] == 'm')
 					cenario[i][j] = '0';
-				if(rand() % 25 == 0 && cenario[i][j] == '0')
+				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posição vazia do cenário tem 1/25 % de chance de ser gerada uma moeda.
 				{	
-					cenario[i][j] = 'c';
+					cenario[i][j] = 'm';
 					qtdPontos++;
 				}		
-			}
-				
+			}			
 	}	
 	return qtdPontos;		
 }
 
-void animacaoDerrota()	
+void animacaoDerrota()	// apenas para estética
 {
 	uchar tempo = 100;    
 	printf("G");
@@ -399,22 +386,18 @@ void animacaoDerrota()
 	printf("!\n\n\t");	
 }
 
-void animacaoVitoria(uchar rodada)
+void animacaoVitoria(uchar fase)	// apenas para estética
 {
 	uchar tempo = 100;
-	printf("R");
+	printf("F");
 	Sleep(tempo);		 
-	printf("O");
+	printf("A");
 	Sleep(tempo);		 
-	printf("D"); 
+	printf("S"); 
 	Sleep(tempo);		
-	printf("A");	
-	Sleep(tempo);	
-	printf("D");	
-	Sleep(tempo);	
-	printf("A"); 
+	printf("E");	
 	Sleep(tempo);		
-	printf(" %d ", rodada);
+	printf(" %d ", fase);
 	Sleep(tempo);		
 	printf("C");
 	Sleep(tempo);	

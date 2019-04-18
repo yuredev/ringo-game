@@ -5,19 +5,23 @@
 #include <stdbool.h>
 #include "game.h"
 
+/* 
+para que o manual de jogo seja apresentado, este jogo deve ser iniciado através 
+da execução do programa launchCapman.exe presente na mesma pasta. 
+*/
+
 int main()
 {
-	
 	SetConsoleTitle("*** C A P M A N ***");
 	char cenario[25][25];	
-	HWND hwnd = GetConsoleWindow();
+	HWND hwnd = GetConsoleWindow();					
 	if(hwnd != NULL) 
 		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
 	agente jogador, inimigo;
 	uchar espera = 40;
 	char direcao;
-	uchar qtdPontos = 50;
-	uchar rodada = 3;
+	uchar qtdPontos;
+	uchar fase = 3;
 	bool continuarJogo = true;
 	strcpy(jogador.categoria, "jogador");
 	strcpy(inimigo.categoria, "inimigo");
@@ -25,51 +29,51 @@ int main()
 	do
 	{
 		direcao = 'z';				
-		jogador = resetarPosicoes(jogador, rodada);
-		inimigo = resetarPosicoes(inimigo, rodada);
-		montarCenario(rodada, cenario, jogador);
-		qtdPontos = gerarPontos(cenario, rodada);
+		jogador = resetarPosicoes(jogador, fase);
+		inimigo = resetarPosicoes(inimigo, fase);
+		montarCenario(fase, cenario, jogador);		
+		qtdPontos = gerarPontos(cenario, fase);
 		do
 		{	
 			system("cls");
-			if(cenario[jogador.linha][jogador.coluna] == 'c')	// Retirar os pontos após captura
+			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas após captura
 			{
 				cenario[jogador.linha][jogador.coluna] = '0';
 				qtdPontos--;
 			}
-			if(cenario[jogador.linha][jogador.coluna] == 't')	// movimentação após teletransporte
+			if(cenario[jogador.linha][jogador.coluna] == 't')	// movimentação após teletransporte. válido apenas para fase 3
 			{
-				if(jogador.linha < 5)
+				if(jogador.linha < 5)							// identificar qual a porta de teletransporte
 					direcao = 'w';
 				else
 					direcao = 'a';	
 			}
-			printf("\n\tPontos restantes: %d",qtdPontos);
-			printf("\t\t\t    Rodada %d",rodada);
+			printf("\n\tFase %d", fase);
+			printf("\t\t\t\tMoedas restantes: %d",qtdPontos);
 			mostrarJogo(cenario, jogador, inimigo);
-			if(kbhit())
-				direcao = getch();			
-			jogador = acaoJogador(direcao, jogador, cenario);
+			if(kbhit())												
+				direcao = getch();									// pegar tecla digitada do usuário
+			jogador = acaoJogador(direcao, jogador, cenario);		// atualizar posição do jogador
 			Sleep(espera);
 		}while(!wasTouched(jogador, inimigo) && qtdPontos > 0);
 		putchar('\a');
 		if(qtdPontos > 0)
 		{
 			animacaoDerrota();
-			rodada = 1;	
+			fase = 1;	
 		}
 		else
 		{
-			animacaoVitoria(rodada);
-			rodada++;	
+			animacaoVitoria(fase);
+			fase++;	
 			espera -= 10; 
 		}
 		printf("Deseja continuar jogando? (S/N): ");
 		do
 		{
-			while(!kbhit());							// laço inifinito até usuário digitar alguma tecla
-			direcao = getch();   						// aproveitamento de variaveis 	
-		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');	
+			while(!kbhit());									// laço inifinito até usuário digitar alguma tecla
+			direcao = getch();   								// aproveitamento de variaveis 	
+		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // só sai do laço se usuário digitar opções validas
 		switch(direcao)
 		{
 			case 'S':
@@ -88,7 +92,6 @@ int main()
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
 	Sleep(500);
-	system("taskkill /f /fi \"windowtitle eq Manual\"");
-	system("pause");
+	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual após termino do jogo
 	return 0;
 }
