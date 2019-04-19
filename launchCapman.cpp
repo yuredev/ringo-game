@@ -3,8 +3,8 @@
 /*
 Observações: 
 
-este programa tem como objetivo iniciar o jogo Capman e mostrar o manual, controle e instruções.
-Compatível apenas com windows 10
+Este programa tem como objetivo iniciar o jogo Capman e mostrar o manual, controle e instruções.
+Este programa é compatível apenas com o Windows 10.
 
 */
 int main()
