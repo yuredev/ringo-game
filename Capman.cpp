@@ -17,47 +17,52 @@ int main()
 	HWND hwnd = GetConsoleWindow();					
 	if(hwnd != NULL) 
 		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
-	agente jogador, inimigo;
+	agente jogador, inimigo, inimigo2;
 	uchar espera = 40;
 	char direcao;
-	uchar qtdPontos;
-	uchar fase = 3;
+	uchar qtdMoedas;
+	uchar fase = 1;
 	bool continuarJogo = true;
 	strcpy(jogador.categoria, "jogador");
 	strcpy(inimigo.categoria, "inimigo");
+	strcpy(inimigo2.categoria, "inimigo2");
 	
 	do
 	{
+		
 		direcao = 'z';				
 		jogador = resetarPosicoes(jogador, fase);
 		inimigo = resetarPosicoes(inimigo, fase);
+		if(fase >= 3)
+			inimigo2 = resetarPosicoes(inimigo2, fase);
+		else
+		{
+			inimigo2.linha = 99;  // apenas para retirar o inimigo2 de jogo nas rodadas 1 e 2 
+			inimigo2.coluna = 99;	
+		}	
 		montarCenario(fase, cenario, jogador);		
-		qtdPontos = gerarPontos(cenario, fase);
+		qtdMoedas = gerarMoedas(cenario, fase);
 		do
 		{	
 			system("cls");
 			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas após captura
 			{
 				cenario[jogador.linha][jogador.coluna] = '0';
-				qtdPontos--;
+				qtdMoedas--;
 			}
 			if(cenario[jogador.linha][jogador.coluna] == 't')	// movimentação após teletransporte. válido apenas para fase 3
-			{
-				if(jogador.linha < 5)							// identificar qual a porta de teletransporte
-					direcao = 'w';
-				else
-					direcao = 'a';	
-			}
+				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';						// identificar qual a porta de teletransporte				
+				
 			printf("\n\tFase %d", fase);
-			printf("\t\t\t\tMoedas restantes: %d",qtdPontos);
-			mostrarJogo(cenario, jogador, inimigo);
+			printf("\t\t\t\tMoedas restantes: %d",qtdMoedas);
+			mostrarJogo(cenario, jogador, inimigo, inimigo2);
 			if(kbhit())												
 				direcao = getch();									// pegar tecla digitada do usuário
 			jogador = acaoJogador(direcao, jogador, cenario);		// atualizar posição do jogador
 			Sleep(espera);
-		}while(!wasTouched(jogador, inimigo) && qtdPontos > 0);
+		}while(!wasTouched(jogador, inimigo, inimigo2) && qtdMoedas > 0);
 		putchar('\a');
-		if(qtdPontos > 0)
+		if(qtdMoedas > 0)
 		{
 			animacaoDerrota();
 			fase = 1;	
@@ -66,7 +71,6 @@ int main()
 		{
 			animacaoVitoria(fase);
 			fase++;	
-			espera -= 10; 
 		}
 		printf("Deseja continuar jogando? (S/N): ");
 		do
@@ -91,7 +95,7 @@ int main()
 	}while(continuarJogo);
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
-	Sleep(500);
+	Sleep(2000);
 	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual após termino do jogo
 	return 0;
 }
