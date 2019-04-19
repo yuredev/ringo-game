@@ -17,10 +17,8 @@
 #define BRANCO "\033[37m"
 #define VERDE "\033[32m"
 #define BRANCO "\033[37m"
-#define FUNDOBRANCO "\033[47m"
 #define FUNDOPRETO "\033[0;0m" 
 #define FUNDOAZUL "\033[44m"
-#define FUNDOVERDE "\033[1;42m"
 #define AMARELO "\033[33m"
 #define ROXO "\033[1;35m"
 
@@ -53,6 +51,57 @@ void writeLine(uchar tam)		// escreve uma linha
 	for(i = 0; i < tam; i++)
 		printf("%c",219);
 	printf("\n");	
+}
+
+agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
+{
+	char direcao;
+
+	if(inimigo.linha == jogador.linha)				// reta para linhas iguais
+	{
+		if(inimigo.coluna < jogador.coluna)
+			direcao = 'd';
+		else 
+			direcao = 'a';	
+	}		 
+	else if(inimigo.coluna == jogador.coluna)			// reta para colunas iguais
+	{
+		if(inimigo.linha < jogador.linha)
+			direcao = 's';
+		else
+			direcao = 'w';	
+	}
+	else if(rand() % 2 == 0)      // movimentação eixo x
+	{		
+		if(inimigo.coluna < jogador.coluna)
+			direcao = 'd';
+		else 
+			direcao = 'a';	
+	}
+	else					// movimentação eixo y
+	{
+		if(inimigo.linha < jogador.linha)
+			direcao = 's';
+		else
+			direcao = 'w';	
+	}
+		
+	switch(direcao)
+	{
+		case 'w':
+			inimigo.linha--;
+			break;
+		case 's':
+			inimigo.linha++;
+			break;
+		case 'a':
+			inimigo.coluna--;
+			break;
+		case 'd':
+			inimigo.coluna++;
+			break;			
+	}
+	return inimigo;
 }
 
 agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o jogador no cenario
@@ -210,6 +259,14 @@ bool wasTouched(agente jogador, agente inimigo, agente inimigo2)	// verifica se 
 {
 	bool touch = false; 
 	if((jogador.linha == inimigo.linha && jogador.coluna == inimigo.coluna) || (jogador.linha == inimigo2.linha && jogador.coluna == inimigo2.coluna))
+		touch = true;
+	else if((jogador.linha-1 == inimigo.linha && jogador.coluna == inimigo.coluna) || (jogador.linha-1 == inimigo2.linha && jogador.coluna == inimigo2.coluna))
+		touch = true;
+	else if((jogador.linha+1 == inimigo.linha && jogador.coluna == inimigo.coluna) || (jogador.linha+1 == inimigo2.linha && jogador.coluna == inimigo2.coluna))
+		touch = true;
+	else if((jogador.linha == inimigo.linha && jogador.coluna-1 == inimigo.coluna) || (jogador.linha == inimigo2.linha && jogador.coluna-1 == inimigo2.coluna))
+		touch = true;
+	else if((jogador.linha == inimigo.linha && jogador.coluna+1 == inimigo.coluna) || (jogador.linha == inimigo2.linha && jogador.coluna+1 == inimigo2.coluna))	
 		touch = true;
 	return touch;
 }

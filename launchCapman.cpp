@@ -1,11 +1,9 @@
 #include "game.h" 
 #include "windows.h" 
 /*
-ObservaÃ§Ãµes: 
-
-Este programa tem como objetivo iniciar o jogo Capman e mostrar o manual, controle e instruÃ§Ãµes.
-Este programa Ã© compatÃ­vel apenas com o Windows 10.
-
+Observações: 
+* Este programa tem como objetivo iniciar o jogo Capman e mostrar o manual, controle e instruções.
+* Este programa é compatível apenas com o Windows 10.
 */
 int main()
 {
