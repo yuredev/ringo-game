@@ -20,7 +20,7 @@ int main()
 	if(hwnd != NULL) 
 		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
 	agente jogador, inimigo, inimigo2;
-	uchar espera = 40;
+	uchar espera = 50;
 	char direcao;
 	uchar qtdMoedas;
 	uchar fase = 1;
@@ -28,13 +28,12 @@ int main()
 	strcpy(jogador.categoria, "jogador");
 	strcpy(inimigo.categoria, "inimigo");
 	strcpy(inimigo2.categoria, "inimigo2");
-	
 	do
 	{
 		direcao = 'z';				
 		jogador = resetarPosicoes(jogador, fase);
 		inimigo = resetarPosicoes(inimigo, fase);
-		if(fase >= 3)
+		if(fase == 3)
 			inimigo2 = resetarPosicoes(inimigo2, fase);
 		else
 		{
@@ -53,11 +52,10 @@ int main()
 			}
 			if(cenario[jogador.linha][jogador.coluna] == 't')							// movimentação após teletransporte. válido apenas para fase 3
 				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';						// identificar qual a porta de teletransporte				
-				
 			printf("\n\tFase %d", fase);
 			printf("\t\t\t\tMoedas restantes: %d",qtdMoedas);
 			inimigo = acaoInimigo(inimigo, jogador, cenario);				// atualizar posicao do inimigo
-			if(fase >= 3)
+			if(fase == 3)
 				inimigo2 = acaoInimigo(inimigo2, jogador, cenario);
 			jogador = acaoJogador(direcao, jogador, cenario);		// atualizar posição do jogador 
 			mostrarJogo(cenario, jogador, inimigo, inimigo2);
@@ -66,17 +64,24 @@ int main()
 			if(wasTouched(jogador, inimigo, inimigo2))				// se o inimigo tocar no jogador é Game Over
 				break;
 			Sleep(espera);
-		}while(qtdMoedas > 0);
+		}while(qtdMoedas > 0 && fase <= 3);
 		putchar('\a');
 		if(qtdMoedas > 0)
 		{
-			animacaoDerrota();
-			fase = 1;	
+			animacaoDerrota();	
+			fase = 1;
 		}
 		else
 		{
 			animacaoVitoria(fase);
 			fase++;	
+			if(fase == 4)
+			{
+				system("cls");
+				printf("Parabens !!!");
+				printf("Voce zerou o jogo :)\n");
+				fase = 1;
+			}
 		}
 		printf("Deseja continuar jogando? (S/N): ");
 		do

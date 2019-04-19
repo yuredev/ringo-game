@@ -89,16 +89,20 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
 	switch(direcao)
 	{
 		case 'w':
-			inimigo.linha--;
+			if(cenario[inimigo.linha-1][inimigo.coluna] != 'p')
+				inimigo.linha--; 
 			break;
 		case 's':
-			inimigo.linha++;
+			if(cenario[inimigo.linha+1][inimigo.coluna] != 'p')
+				inimigo.linha++;
 			break;
 		case 'a':
-			inimigo.coluna--;
+			if(cenario[inimigo.linha][inimigo.coluna-1] != 'p')
+				inimigo.coluna--;
 			break;
 		case 'd':
-			inimigo.coluna++;
+			if(cenario[inimigo.linha][inimigo.coluna+1] != 'p')
+				inimigo.coluna++;
 			break;			
 	}
 	return inimigo;
@@ -203,21 +207,6 @@ agente resetarPosicoes(agente x, uchar fase)		// metodo que reseta posicoes do j
 				x.linha = 5;
 				x.coluna = 6;
 			}
-			break;
-		case 4:
-			//if(!strcmp(x.categoria, "inimigo"))
-			//{
-				
-			//}
-			//else
-			break;
-		case 5:
-			//if(!strcmp(x.categoria, "inimigo"))
-			//{
-				
-			//}
-			//else
-			break;	
 	}	
 	return x;
 }
@@ -364,45 +353,28 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 				else 
 					cenario[17][j] = 'p';					
 			}
-			break;	
-		case 4:
-		
-			break;	
-		case 5:
-		
-			break;	
-		default:
-		
-			break;
 	}		
 }
 
-int gerarMoedas(char cenario[25][25], uchar rodada)		// gera os moedas da fase 
+int gerarMoedas(char cenario[25][25], uchar fase)		// gera os moedas da fase 
 {
-	uchar qtdMoedasRodada;
+	uchar qtdMoedasFase;
 	uchar i,j;
 	uchar qtdMoedas = 0;
 	srand(time(NULL));
-	switch(rodada)						// definir quantas moedas serão geradas de acordo com a fase
+	switch(fase)						// definir quantas moedas serão geradas de acordo com a fase
 	{
 		case 1:
-			qtdMoedasRodada = 20;
+			qtdMoedasFase = 20;
 			break;
 		case 2:
-			qtdMoedasRodada = 25;
+			qtdMoedasFase = 25;
 			break;
 		case 3:
-			qtdMoedasRodada = 30;
-			break;
-		case 4:
-			qtdMoedasRodada = 35;
-			break;
-		case 5:
-			qtdMoedasRodada = 40;
-			break;	
+			qtdMoedasFase = 30;
 	}
 	
-	while(qtdMoedas != qtdMoedasRodada) // se a quantidade de moedas geradas nao for igual a quantidade estaebelecida para a fase, as moedas tem que ser geradas novamente. 
+	while(qtdMoedas != qtdMoedasFase) // se a quantidade de moedas geradas nao for igual a quantidade estaebelecida para a fase, as moedas tem que ser geradas novamente. 
 	{
 		qtdMoedas = 0;
 		for(i = 0; i < 25; i++)
@@ -482,4 +454,3 @@ void animacaoVitoria(uchar fase)	// apenas para estética
 	printf("!\n\n\t");	
 	Sleep(tempo);	
 }
-
