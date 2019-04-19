@@ -1,6 +1,12 @@
 #include "game.h" 
 #include "windows.h" 
-// este programa tem como objetivo iniciar o jogo Capman e mostrar o manual, controle e instru��es.
+/*
+Observações: 
+
+este programa tem como objetivo iniciar o jogo Capman e mostrar o manual, controle e instruções.
+Compatível apenas com windows 10
+
+*/
 int main()
 {
 	SetConsoleTitle("LaunchCapman");
