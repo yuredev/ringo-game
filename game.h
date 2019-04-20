@@ -28,12 +28,10 @@ struct agente		// estrutura do jogador e inimigo
 {
 	int linha;
 	int coluna;
-	bool congelado = false;
-	char tempoCongelado;
 	char categoria[8];
 };   
 
-void apresentacao()		// sÛ estÈtica
+void apresentacao()		// s√≥ est√©tica
 {
 	system("color 0F");
 	printf( BRANCO FUNDOAZUL"\n"
@@ -71,14 +69,14 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
 		else
 			direcao = 'w';	
 	}
-	else if(rand() % 2 == 0)      // movimentaÁ„o eixo x
+	else if(rand() % 2 == 0)      // movimenta√ß√£o eixo x
 	{		
 		if(inimigo.coluna < jogador.coluna)
 			direcao = 'd';
 		else 
 			direcao = 'a';	
 	}
-	else					// movimentaÁ„o eixo y
+	else					// movimenta√ß√£o eixo y
 	{
 		if(inimigo.linha < jogador.linha)
 			direcao = 's';
@@ -143,7 +141,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o
 		switch(direcao)
 		{
 			case 'w':
-				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador sÛ mexe se a prÛxima casa n„o houver paredes. isso se aplica aos outros cases
+				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador s√≥ mexe se a pr√≥xima casa n√£o houver paredes. isso se aplica aos outros cases
 					jogador.linha--;
 				break;	
 			case 'a':
@@ -163,7 +161,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o
 	return jogador;	
 }
 
-agente resetarPosicoes(agente x, uchar fase)		// metodo que reseta posicoes do jogador ou do inimigo. agente X È genÈrico
+agente resetarPosicoes(agente x, uchar fase)		// metodo que reseta posicoes do jogador ou do inimigo. agente X √© gen√©rico
 {
 	switch(fase)
 	{
@@ -218,7 +216,7 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 	writeLine(52);
 	for(i = 0; i < 25; i++)
 	{
-		printf("\t%c",219);									// limite do cen·rio, parede do Ìnicio
+		printf("\t%c",219);									// limite do cen√°rio, parede do √≠nicio
 		for(j = 0; j < 25; j++)
 		{
 			if(cenario[i][j] == 't')					//mostrar teletransporte
@@ -229,14 +227,14 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 				printf(VERMELHO "%c " CINZA,254);
 			else if(i == jogador.linha && j == jogador.coluna)	// mostrar jogador 	
 				printf("%c ",254);							
-			else if(cenario[i][j] == '0')					// mostrar espaÁo vazio
+			else if(cenario[i][j] == '0')					// mostrar espa√ßo vazio
 				printf("  ");
 			else if(cenario[i][j] == 'p')					// mostrar paredes
 				printf("%c%c", 178,178);		
 			else if(cenario[i][j] == 'm')					//mostrar moedas
 				printf(AMARELO "* " CINZA);	
 		}
-		printf("%c",219);							// limite do cen·rio, parede do fim
+		printf("%c",219);							// limite do cen√°rio, parede do fim
 		printf("\n");
 	}
 	printf("\t");
@@ -260,7 +258,7 @@ bool wasTouched(agente jogador, agente inimigo, agente inimigo2)	// verifica se 
 	return touch;
 }
 
-void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])	// constrÛi uma parede no cen·rio do jogo 
+void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])	// constr√≥i uma parede no cen√°rio do jogo 
 {
 	for(; inicioParede <= fimParede; inicioParede++)
 		cenario[linha][inicioParede] = 'p';
@@ -273,7 +271,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 	for(i = 0; i < 25; i++)			// zerar cenario para construir o novo 
 		for(j = 0; j < 25; j++)
 			cenario[i][j] = '0';
-	switch(fase)					// monta as paredes do cen·rio de acordo com a fase 
+	switch(fase)					// monta as paredes do cen√°rio de acordo com a fase 
 	{
 		case 1:
 			for(j = 2; j < 23; j+=2)
@@ -295,7 +293,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 		case 2:
 			for(j = 1; j < 24; j++)   
 			{
-				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divis„o por 2. numero par + 2 continua par. impar + 2 continua impar
+				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divis√£o por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
 					cenario[10][j] = 'p';
 					cenario[14][j] = 'p';
@@ -336,7 +334,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 			fazerParede(6, 0, 24, cenario);
 			for(j = 1; j < 24; j++)   
 			{
-				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divis„o por 2. numero par + 2 continua par. impar + 2 continua impar
+				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divis√£o por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
 					cenario[9][j] = 'p';
 				}
@@ -346,7 +344,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 			fazerParede(14, 2, 22, cenario);
 			for(j = 1; j < 24; j++)   
 			{
-				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divis„o por 2. numero par + 2 continua par. impar + 2 continua impar
+				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divis√£o por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
 					cenario[19][j] = 'p';
 				}
@@ -362,7 +360,7 @@ int gerarMoedas(char cenario[25][25], uchar fase)		// gera os moedas da fase
 	uchar i,j;
 	uchar qtdMoedas = 0;
 	srand(time(NULL));
-	switch(fase)						// definir quantas moedas ser„o geradas de acordo com a fase
+	switch(fase)						// definir quantas moedas ser√£o geradas de acordo com a fase
 	{
 		case 1:
 			qtdMoedasFase = 20;
@@ -382,7 +380,7 @@ int gerarMoedas(char cenario[25][25], uchar fase)		// gera os moedas da fase
 			{
 				if(cenario[i][j] == 'm')
 					cenario[i][j] = '0';
-				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posiÁ„o vazia do cen·rio tem 1/25 % de chance de ser gerada uma moeda.
+				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posi√ß√£o vazia do cen√°rio tem 1/25 % de chance de ser gerada uma moeda.
 				{	
 					cenario[i][j] = 'm';
 					qtdMoedas++;
@@ -392,7 +390,7 @@ int gerarMoedas(char cenario[25][25], uchar fase)		// gera os moedas da fase
 	return qtdMoedas;		
 }
 
-void animacaoDerrota()	// apenas para estÈtica
+void animacaoDerrota()	// apenas para est√©tica
 {
 	uchar tempo = 100;    
 	printf("G");
@@ -420,7 +418,7 @@ void animacaoDerrota()	// apenas para estÈtica
 	printf("!\n\n\t");	
 }
 
-void animacaoVitoria(uchar fase)	// apenas para estÈtica
+void animacaoVitoria(uchar fase)	// apenas para est√©tica
 {
 	uchar tempo = 100;
 	printf("F");
