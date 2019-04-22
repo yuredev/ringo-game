@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include "game.h"
 
+#define ESPERA 110
+
 /* 
 Observações: 
 * Somente compatível com Windows 10
@@ -20,10 +22,11 @@ int main()
 	if(hwnd != NULL) 
 		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
 	agente jogador, inimigo, inimigo2;
-	uchar espera = 50;
 	char direcao;
 	uchar qtdMoedas;
 	uchar fase = 1;
+	uchar posMoeda[2];
+	bool flag = false;
 	bool continuarJogo = true;
 	strcpy(jogador.categoria, "jogador");
 	strcpy(inimigo.categoria, "inimigo");
@@ -42,30 +45,49 @@ int main()
 		}	
 		montarCenario(fase, cenario, jogador);		
 		qtdMoedas = gerarMoedas(cenario, fase);
+		system("cls");
+		printf("\n\tFase %d", fase);
+		printf("\t\t\t\tMoedas restantes: %d",qtdMoedas);
+		mostrarJogo(cenario, jogador, inimigo, inimigo2);
 		do
 		{	
-			system("cls");
 			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas após captura
 			{
-				cenario[jogador.linha][jogador.coluna] = '0';
 				qtdMoedas--;
+				cenario[jogador.linha][jogador.coluna] = '0';
+				moverCursor(2,59, false);
+				printf("%d ",qtdMoedas);
 			}
+			if(flag)										   // mostra denovo a moeda que o inimigo passou por cima
+			{
+				moverCursor(posMoeda[0], posMoeda[1], true);
+				printf(AMARELO "*" CINZA);
+			}
+			if(cenario[inimigo.linha][inimigo.coluna] == 'm') // se o inimigo passar por cima da moeda ela nao desaparece
+			{
+				flag = true;
+				posMoeda[0] = inimigo.linha;
+				posMoeda[1] = inimigo.coluna;
+			}	
+			else 
+				flag = false;
+			
 			if(cenario[jogador.linha][jogador.coluna] == 't')							// movimentação após teletransporte. válido apenas para fase 3
 				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';						// identificar qual a porta de teletransporte				
-			printf("\n\tFase %d", fase);
-			printf("\t\t\t\tMoedas restantes: %d",qtdMoedas);
-			inimigo = acaoInimigo(inimigo, jogador, cenario);				// atualizar posicao do inimigo
-			if(fase == 3)
-				inimigo2 = acaoInimigo(inimigo2, jogador, cenario);
+			
 			jogador = acaoJogador(direcao, jogador, cenario);		// atualizar posição do jogador 
-			mostrarJogo(cenario, jogador, inimigo, inimigo2);
+			inimigo = acaoInimigo(inimigo, jogador, cenario);		// atualizar posicao do inimigo
+
+			if(fase == 3)												
+				inimigo2 = acaoInimigo(inimigo2, jogador, cenario);	
+			
 			if(kbhit())												
 				direcao = getch();									// pegar tecla digitada do usuário
-			if(wasTouched(jogador, inimigo, inimigo2))				// se o inimigo tocar no jogador é Game Over
-				break;
-			Sleep(espera);
-		}while(qtdMoedas > 0 && fase <= 3);
+
+			Sleep(ESPERA);
+		}while(qtdMoedas > 0 && !wasTouched(jogador, inimigo, inimigo2));
 		putchar('\a');
+		moverCursor(32, 9, false);
 		if(qtdMoedas > 0)
 		{
 			animacaoDerrota();	

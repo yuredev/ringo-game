@@ -50,11 +50,88 @@ void writeLine(uchar tam)		// escreve uma linha
 		printf("%c",219);
 	printf("\n");	
 }
+void moverCursor(int linha, int coluna, bool aPartirDaMatriz)	// move o cursor
+{
+	if(aPartirDaMatriz)
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){coluna * 2 + 9, linha + 4});
+	else
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){coluna - 1, linha -1});	
+}
+
+agente teletransporte(agente jogador, char cenario[25][25])
+{
+	moverCursor(jogador.linha, jogador.coluna, true);
+	printf(ROXO "%c%c" CINZA, 178,178);
+	if(jogador.linha < 5)			// identificar qual porta de teletransporte
+	{
+		jogador.linha = 23;
+		jogador.coluna = 12;
+	}
+	else 
+	{
+		jogador.linha = 0;
+		jogador.coluna = 23;
+	}
+	return jogador;
+}
+
+agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o jogador no cenario
+{
+	moverCursor(jogador.linha, jogador.coluna, true);
+	printf(" ");	
+	if(cenario[jogador.linha][jogador.coluna] == 't')	// teletransporte
+		jogador = teletransporte(jogador, cenario);
+	
+	else			// se n鉶 for teleteransportar a movimenta玢o ocorre normalmente 
+	{
+		switch(direcao)	// apenas para aceitar caps lock
+		{
+			case 'W':
+				direcao = 'w';
+				break;	
+			case 'A':
+				direcao = 'a';
+				break;		
+			case 'D':
+				direcao = 'd';
+				break;	
+			case 'S':
+				direcao = 's';
+				break;			
+		}
+		switch(direcao)
+		{
+			case 'w':
+				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador s贸 mexe se a pr贸xima casa n茫o houver paredes. isso se aplica aos outros cases
+					jogador.linha--;
+				break;	
+			case 'a':
+				if(jogador.coluna > 0 && cenario[jogador.linha][jogador.coluna - 1] != 'p')
+					jogador.coluna--;
+				break;	
+			case 'd':
+				if(jogador.coluna < 24 && cenario[jogador.linha][jogador.coluna + 1] != 'p')
+					jogador.coluna++;
+				break;	
+			case 's':
+				if(jogador.linha < 24 && cenario[jogador.linha + 1][jogador.coluna] != 'p')
+					jogador.linha++;
+				break;		
+		}	
+	}
+	moverCursor(jogador.linha, jogador.coluna, true);
+	printf("%c",254);
+	moverCursor(25, 0,true);
+	return jogador;	
+}
 
 agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
 {
 	char direcao;
-
+	
+	moverCursor(inimigo.linha, inimigo.coluna, true);
+	printf(" ");	
+	
 	if(inimigo.linha == jogador.linha)				// reta para linhas iguais
 	{
 		if(inimigo.coluna < jogador.coluna)
@@ -103,62 +180,10 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
 				inimigo.coluna++;
 			break;			
 	}
+	moverCursor(inimigo.linha, inimigo.coluna, true);
+	printf(VERMELHO"%c" CINZA, 254);
+	moverCursor(25, 0,true);
 	return inimigo;
-}
-
-agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o jogador no cenario
-{
-	if(cenario[jogador.linha][jogador.coluna] == 't')	// teletransporte
-	{
-		if(jogador.linha < 5)			// identificar qual porta de teletransporte
-		{
-			jogador.linha = 23;
-			jogador.coluna = 12;
-		}
-		else 
-		{
-			jogador.linha = 0;
-			jogador.coluna = 23;
-		}
-	}
-	else
-	{
-		switch(direcao)	// apenas para aceitar caps lock
-		{
-			case 'W':
-				direcao = 'w';
-				break;	
-			case 'A':
-				direcao = 'a';
-				break;		
-			case 'D':
-				direcao = 'd';
-				break;	
-			case 'S':
-				direcao = 's';
-				break;			
-		}
-		switch(direcao)
-		{
-			case 'w':
-				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador s贸 mexe se a pr贸xima casa n茫o houver paredes. isso se aplica aos outros cases
-					jogador.linha--;
-				break;	
-			case 'a':
-				if(jogador.coluna > 0 && cenario[jogador.linha][jogador.coluna - 1] != 'p')
-					jogador.coluna--;
-				break;	
-			case 'd':
-				if(jogador.coluna < 24 && cenario[jogador.linha][jogador.coluna + 1] != 'p')
-					jogador.coluna++;
-				break;	
-			case 's':
-				if(jogador.linha < 24 && cenario[jogador.linha + 1][jogador.coluna] != 'p')
-					jogador.linha++;
-				break;		
-		}	
-	}
-	return jogador;	
 }
 
 agente resetarPosicoes(agente x, uchar fase)		// metodo que reseta posicoes do jogador ou do inimigo. agente X 茅 gen茅rico
@@ -221,7 +246,7 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 		{
 			if(cenario[i][j] == 't')					//mostrar teletransporte
 				printf(ROXO "%c%c" CINZA,178,178);	
-			else if(i == inimigo2.linha && j == inimigo2.coluna)
+			else if(i == inimigo2.linha && j == inimigo2.coluna)	// mostrar segundo inimigo (fase 2)
 				printf(VERMELHO "%c " CINZA,254);	
 			else if(i == inimigo.linha && j == inimigo.coluna)	// mostrar inimigo 
 				printf(VERMELHO "%c " CINZA,254);
@@ -391,7 +416,7 @@ int gerarMoedas(char cenario[25][25], uchar fase)		// gera os moedas da fase
 }
 
 void animacaoDerrota()	// apenas para est茅tica
-{
+{	
 	uchar tempo = 100;    
 	printf("G");
 	Sleep(tempo);		 
