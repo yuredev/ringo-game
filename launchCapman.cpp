@@ -22,7 +22,7 @@ int main()
 	printf("CONTROLES:\n");
 	printf("\n W - Cima\n S - Baixo\n D - Direita\n A - Esquerda");
 	printf("\n\nOBJETIVO:\n");
-	printf("\n Capture todas as moedas\n para ir para o proximo nivel.\n Nao deixe o inimigo te pegar.");
+	printf("\n Capture todas as moedas\n para ir para o proximo nivel.\n Nao seja pego pelo inimigo.");
 	printf("\n\nLEGENDA:\n");
 	printf("\n * Jogador: %c",254);
 	printf("\n * Inimigo: " VERMELHO);
