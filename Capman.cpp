@@ -24,9 +24,11 @@ int main()
 	agente jogador, inimigo, inimigo2;
 	char direcao;
 	uchar qtdMoedas;
-	uchar fase = 1;
+	uchar fase = 3;
 	uchar posMoeda[2];
+	uchar posMoeda2[2];
 	bool flag = false;
+	bool flag2 = false;
 	bool continuarJogo = true;
 	strcpy(jogador.categoria, "jogador");
 	strcpy(inimigo.categoria, "inimigo");
@@ -72,6 +74,20 @@ int main()
 			else 
 				flag = false;
 			
+			if(flag2)										   // mostra denovo a moeda que o inimigo passou por cima
+			{
+				moverCursor(posMoeda2[0], posMoeda2[1], true);
+				printf(AMARELO "*" CINZA);
+			}
+			if(cenario[inimigo2.linha][inimigo2.coluna] == 'm') // se o inimigo passar por cima da moeda ela nao desaparece
+			{
+				flag2 = true;
+				posMoeda2[0] = inimigo2.linha;
+				posMoeda2[1] = inimigo2.coluna;
+			}	
+			else 
+				flag2 = false;
+			
 			if(cenario[jogador.linha][jogador.coluna] == 't')							// movimentação após teletransporte. válido apenas para fase 3
 				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';						// identificar qual a porta de teletransporte				
 			
@@ -91,7 +107,7 @@ int main()
 		if(qtdMoedas > 0)
 		{
 			animacaoDerrota();	
-			fase = 1;
+			fase = 3;
 		}
 		else
 		{
