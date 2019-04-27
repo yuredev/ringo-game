@@ -24,7 +24,7 @@ int main()
 	agente jogador, inimigo, inimigo2;
 	char direcao;
 	uchar qtdMoedas;
-	uchar fase = 3;
+	uchar fase = 1;
 	uchar posMoeda[2];
 	uchar posMoeda2[2];
 	bool flag = false;
@@ -105,10 +105,8 @@ int main()
 		putchar('\a');
 		moverCursor(32, 9, false);
 		if(qtdMoedas > 0)
-		{
 			animacaoDerrota();	
-			fase = 3;
-		}
+		
 		else
 		{
 			animacaoVitoria(fase);
