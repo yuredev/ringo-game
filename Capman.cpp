@@ -73,20 +73,22 @@ int main()
 			}	
 			else 
 				flag = false;
-			
-			if(flag2)										   // mostra denovo a moeda que o inimigo passou por cima
+			if(fase == 3)
 			{
-				moverCursor(posMoeda2[0], posMoeda2[1], true);
-				printf(AMARELO "*" CINZA);
+				if(flag2)										   // mostra denovo a moeda que o inimigo passou por cima
+				{
+					moverCursor(posMoeda2[0], posMoeda2[1], true);
+					printf(AMARELO "*" CINZA);
+				}
+				if(cenario[inimigo2.linha][inimigo2.coluna] == 'm') // se o inimigo passar por cima da moeda ela nao desaparece
+				{
+					flag2 = true;
+					posMoeda2[0] = inimigo2.linha;
+					posMoeda2[1] = inimigo2.coluna;
+				}	
+				else 
+					flag2 = false;
 			}
-			if(cenario[inimigo2.linha][inimigo2.coluna] == 'm') // se o inimigo passar por cima da moeda ela nao desaparece
-			{
-				flag2 = true;
-				posMoeda2[0] = inimigo2.linha;
-				posMoeda2[1] = inimigo2.coluna;
-			}	
-			else 
-				flag2 = false;
 			
 			if(cenario[jogador.linha][jogador.coluna] == 't')							// movimentação após teletransporte. válido apenas para fase 3
 				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';						// identificar qual a porta de teletransporte				
