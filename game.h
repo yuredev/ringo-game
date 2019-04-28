@@ -132,6 +132,14 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
 	moverCursor(inimigo.linha, inimigo.coluna, true);
 	printf(" ");	
 	
+	if(!strcmp(inimigo.categoria,"inimigo") && ((inimigo.linha < jogador.linha && cenario[inimigo.linha + 1][inimigo.coluna] == 'p') || (inimigo.linha > jogador.linha && cenario[inimigo.linha - 1][inimigo.coluna] == 'p')))
+	{
+		if(jogador.coluna > 12)
+			direcao = 'd';
+		else
+			direcao = 'a';
+	}	
+	else 
 	if(inimigo.linha == jogador.linha)				// reta para linhas iguais
 	{
 		if(inimigo.coluna < jogador.coluna)

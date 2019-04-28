@@ -24,7 +24,7 @@ int main()
 	agente jogador, inimigo, inimigo2;
 	char direcao;
 	uchar qtdMoedas;
-	uchar fase = 1;
+	uchar fase = 3;
 	uchar posMoeda[2];
 	uchar posMoeda2[2];
 	bool flag = false;
