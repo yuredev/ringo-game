@@ -29,6 +29,8 @@ int main()
 	printf("%c" CINZA, 254);
 	printf("\n * Moedas: " AMARELO);
 	printf("*" CINZA);
+	printf("\n * Poder de Congelamento: " AZUL);
+	printf("#" CINZA);
 	printf("\n * Teletransporte: " ROXO);
 	printf("%c\n\n" CINZA,178);
 	getch();
