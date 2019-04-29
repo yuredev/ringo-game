@@ -10,9 +10,11 @@
 #include <time.h>
 #include <string.h>
 
+//cores em ANSI utilizadas 
+#define CIANO "\033[36m"
 #define PRETO "\033[30m"
 #define AZUL "\033[34m"  
-#define VERMELHO "\x1b[31m" //cores em ANSI utilizadas 
+#define VERMELHO "\x1b[31m" 
 #define CINZA     "\e[0;37m"
 #define BRANCO "\033[37m"
 #define VERDE "\033[32m"
@@ -75,13 +77,13 @@ agente teletransporte(agente jogador, char cenario[25][25])
 	return jogador;
 }
 
-agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o jogador no cenario
+agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gelo)	// mexe o jogador no cenario
 {
 	moverCursor(jogador.linha, jogador.coluna, true);
 	printf(" ");	
 	if(cenario[jogador.linha][jogador.coluna] == 't')	// teletransporte
 		jogador = teletransporte(jogador, cenario);
-	
+		
 	else			// se não for teleteransportar a movimentação ocorre normalmente 
 	{
 		switch(direcao)	// apenas para aceitar caps lock
@@ -119,6 +121,10 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25])	// mexe o
 				break;		
 		}	
 	}
+	
+	if(cenario[jogador.linha][jogador.coluna] == 'g')
+		*gelo = true;
+	
 	moverCursor(jogador.linha, jogador.coluna, true);
 	printf("%c",254);
 	moverCursor(25, 0,true);
@@ -130,7 +136,7 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
 	char direcao;
 	
 	moverCursor(inimigo.linha, inimigo.coluna, true);
-	printf(" ");	
+	printf("  ");	
 	
 	if(!strcmp(inimigo.categoria,"inimigo") && ((inimigo.linha < jogador.linha && cenario[inimigo.linha + 1][inimigo.coluna] == 'p') || (inimigo.linha > jogador.linha && cenario[inimigo.linha - 1][inimigo.coluna] == 'p')))
 	{
@@ -254,6 +260,8 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 		{
 			if(cenario[i][j] == 't')					//mostrar teletransporte
 				printf(ROXO "%c%c" CINZA,178,178);	
+			else if(cenario[i][j] == 'g')				// mostrar gelo 
+				printf(CIANO "# " CINZA);	
 			else if(i == inimigo2.linha && j == inimigo2.coluna)	// mostrar segundo inimigo (fase 2)
 				printf(VERMELHO "%c " CINZA,254);	
 			else if(i == inimigo.linha && j == inimigo.coluna)	// mostrar inimigo 
@@ -307,6 +315,10 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 	switch(fase)					// monta as paredes do cenÃ¡rio de acordo com a fase 
 	{
 		case 1:
+			
+			cenario[10][1] = 'g';
+			cenario[23][20] = 'g';
+			
 			for(j = 2; j < 23; j+=2)
 				cenario[4][j] = 'p';
 					
@@ -324,6 +336,10 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 				cenario[21][j] = 'p';				
 			break;	
 		case 2:
+			cenario[8][3] = 'g';
+			cenario[23][20] = 'g';
+			
+			
 			for(j = 1; j < 24; j++)   
 			{
 				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisÃ£o por 2. numero par + 2 continua par. impar + 2 continua impar
@@ -342,6 +358,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 			fazerParede(22, 14, 23, cenario);	
 			break;	
 		case 3:
+			cenario[1][5] = 'g';
 			cenario[0][24] = 't';
 			cenario[1][24] = 't';
 			fazerParede(24, 0, 24, cenario);

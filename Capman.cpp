@@ -8,10 +8,10 @@
 #define ESPERA 110
 
 /* 
-Observa√ß√µes: 
-* Somente compat√≠vel com Windows 10
-* para que o manual de jogo seja apresentado, este jogo deve ser iniciado atrav√©s 
-da execu√ß√£o do programa launchCapman.exe presente na mesma pasta. 
+ObservaÁıes: 
+* Somente compatÌvel com Windows 10
+* para que o manual de jogo seja apresentado, este jogo deve ser iniciado atravÈs 
+da execuÁ„o do programa launchCapman.exe presente na mesma pasta. 
 */
 
 int main()
@@ -24,9 +24,11 @@ int main()
 	agente jogador, inimigo, inimigo2;
 	char direcao;
 	uchar qtdMoedas;
-	uchar fase = 1;
+	uchar fase = 3;
 	uchar posMoeda[2];
 	uchar posMoeda2[2];
+	uchar tempo = 0;
+	bool gelo = false;
 	bool flag = false;
 	bool flag2 = false;
 	bool continuarJogo = true;
@@ -53,7 +55,13 @@ int main()
 		mostrarJogo(cenario, jogador, inimigo, inimigo2);
 		do
 		{	
-			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas ap√≥s captura
+			if(wasTouched(jogador, inimigo, inimigo2))		// se o inimigo tocar no jogador o jogo termina 
+				break;
+			
+			if(cenario[inimigo.linha][inimigo.coluna] == 'g')
+				cenario[inimigo.linha][inimigo.coluna] = '0';
+			
+			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas apÛs captura
 			{
 				qtdMoedas--;
 				cenario[jogador.linha][jogador.coluna] = '0';
@@ -72,15 +80,15 @@ int main()
 				posMoeda[1] = inimigo.coluna;
 			}	
 			else 
-				flag = false;
+				flag = false;								
 			if(fase == 3)
 			{
-				if(flag2)										   // mostra denovo a moeda que o inimigo passou por cima
+				if(flag2)										   		// mostra denovo a moeda que o inimigo passou por cima
 				{
 					moverCursor(posMoeda2[0], posMoeda2[1], true);
 					printf(AMARELO "*" CINZA);
 				}
-				if(cenario[inimigo2.linha][inimigo2.coluna] == 'm') // se o inimigo passar por cima da moeda ela nao desaparece
+				if(cenario[inimigo2.linha][inimigo2.coluna] == 'm') 	// se o inimigo passar por cima da moeda ela nao desaparece
 				{
 					flag2 = true;
 					posMoeda2[0] = inimigo2.linha;
@@ -90,20 +98,45 @@ int main()
 					flag2 = false;
 			}
 			
-			if(cenario[jogador.linha][jogador.coluna] == 't')							// movimenta√ß√£o ap√≥s teletransporte. v√°lido apenas para fase 3
-				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';						// identificar qual a porta de teletransporte				
+			if(cenario[jogador.linha][jogador.coluna] == 't')			// movimentaÁ„o apÛs teletransporte. v·lido apenas para fase 3
+				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';	// identificar qual a porta de teletransporte				
 			
-			jogador = acaoJogador(direcao, jogador, cenario);		// atualizar posi√ß√£o do jogador 
-			inimigo = acaoInimigo(inimigo, jogador, cenario);		// atualizar posicao do inimigo
-
-			if(fase == 3)												
-				inimigo2 = acaoInimigo(inimigo2, jogador, cenario);	
+			jogador = acaoJogador(direcao, jogador, cenario, &gelo);			// atualizar posiÁ„o do jogador 
+			
+			if(!gelo)
+				inimigo = acaoInimigo(inimigo, jogador, cenario);		// atualizar posicao do inimigo
+			if(fase == 3 && !gelo)												
+				inimigo2 = acaoInimigo(inimigo2, jogador, cenario);		// atualizar posicao do segundo inimigo
 			
 			if(kbhit())												
-				direcao = getch();									// pegar tecla digitada do usu√°rio
+				direcao = getch();										// pegar tecla digitada do usu·rio
 
+			if(gelo)			// se o inimigo estiver comgelado, tem que ser contado o tempo de congelamento
+			{
+				tempo++;
+				moverCursor(inimigo.linha,inimigo.coluna,true);
+				printf(CIANO "%c%c" CINZA, 178, 178);
+				if(fase == 3)
+				{
+					moverCursor(inimigo2.linha,inimigo2.coluna,true);
+					printf(CIANO "%c%c" CINZA, 178, 178);
+				}
+				moverCursor(2, 17, false);
+				printf(CIANO " *Pegou congelamento*" CINZA);
+				moverCursor(25, 0,true);
+				
+			} 
+			if(tempo == 20)		// 20 È o tempo de congelamento, quando chegar nele o inimigo descongela 
+			{
+				moverCursor(2, 17, false);
+				printf("                        ");
+				moverCursor(25, 0,true);
+				gelo = false;	
+				tempo = 0;
+			}
+		
 			Sleep(ESPERA);
-		}while(qtdMoedas > 0 && !wasTouched(jogador, inimigo, inimigo2));
+		}while(qtdMoedas > 0);
 		putchar('\a');
 		moverCursor(32, 9, false);
 		if(qtdMoedas > 0)
@@ -124,9 +157,9 @@ int main()
 		printf("Deseja continuar jogando? (S/N): ");
 		do
 		{
-			while(!kbhit());									// la√ßo inifinito at√© usu√°rio digitar alguma tecla
+			while(!kbhit());									// laÁo inifinito atÈ usu·rio digitar alguma tecla
 			direcao = getch();   								// aproveitamento de variaveis 	
-		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // s√≥ sai do la√ßo se usu√°rio digitar op√ß√µes validas
+		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // sÛ sai do laÁo se usu·rio digitar opÁıes validas
 		switch(direcao)
 		{
 			case 'S':
@@ -145,6 +178,6 @@ int main()
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
 	Sleep(2000);
-	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual ap√≥s termino do jogo
+	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual apÛs termino do jogo
 	return 0;
 }
