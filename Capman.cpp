@@ -104,9 +104,9 @@ int main()
 			jogador = acaoJogador(direcao, jogador, cenario, &gelo);			// atualizar posição do jogador 
 			
 			if(!gelo)
-				inimigo = acaoInimigo(inimigo, jogador, cenario);		// atualizar posicao do inimigo
+				inimigo = acaoInimigo(inimigo, jogador, cenario, fase);		// atualizar posicao do inimigo
 			if(fase == 3 && !gelo)												
-				inimigo2 = acaoInimigo(inimigo2, jogador, cenario);		// atualizar posicao do segundo inimigo
+				inimigo2 = acaoInimigo(inimigo2, jogador, cenario, fase);		// atualizar posicao do segundo inimigo
 			
 			if(kbhit())												
 				direcao = getch();										// pegar tecla digitada do usuário

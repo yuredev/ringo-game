@@ -131,14 +131,15 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 	return jogador;	
 }
 
-agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25])
+agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar fase)
 {
 	char direcao;
 	
 	moverCursor(inimigo.linha, inimigo.coluna, true);
 	printf("  ");	
 	
-	if(!strcmp(inimigo.categoria,"inimigo") && ((inimigo.linha < jogador.linha && cenario[inimigo.linha + 1][inimigo.coluna] == 'p') || (inimigo.linha > jogador.linha && cenario[inimigo.linha - 1][inimigo.coluna] == 'p')))
+	// verificação parar desvio de paredes, a primeira parte é apenas para na fase 3 o jogador não desviar da parede que preenche a tela inteira.
+	if(!(fase == 3 && (inimigo.linha == 6 || inimigo.linha)) && !strcmp(inimigo.categoria,"inimigo") && ((inimigo.linha < jogador.linha && cenario[inimigo.linha + 1][inimigo.coluna] == 'p') || (inimigo.linha > jogador.linha && cenario[inimigo.linha - 1][inimigo.coluna] == 'p')))
 	{
 		if(jogador.coluna > 12)
 			direcao = 'd';
