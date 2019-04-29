@@ -1,7 +1,10 @@
 # CapmanAlpha 
 ### Jogo inspirado no Pacman  
 
+### Tela do Jogo
 ![Tela de jogo](/amostra.PNG)
+
+### Manual
 ![Manual](/manual.PNG)
 
 ### Observações:
