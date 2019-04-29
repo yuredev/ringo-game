@@ -1,7 +1,7 @@
 # CapmanAlpha 
 ### Jogo inspirado no Pacman  
 
-![TelaDeJogo](/tela.PNG)
+![TelaDeJogo](/amostra.PNG)
 
 ### Observações:
 * O Jogo deve ser executado pelo arquivo LaunchCapman.exe para que o manual de jogo seja apresentado.
