@@ -123,8 +123,11 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 	}
 	
 	if(cenario[jogador.linha][jogador.coluna] == 'g')
+	{
 		*gelo = true;
-	
+		cenario[jogador.linha][jogador.coluna] = '0';
+	}
+		
 	moverCursor(jogador.linha, jogador.coluna, true);
 	printf("%c",254);
 	moverCursor(25, 0,true);
@@ -134,6 +137,9 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar fase)
 {
 	char direcao;
+	
+	if(cenario[inimigo.linha][inimigo.coluna] == 'g')
+		cenario[inimigo.linha][inimigo.coluna] = '0';
 	
 	moverCursor(inimigo.linha, inimigo.coluna, true);
 	printf("  ");	

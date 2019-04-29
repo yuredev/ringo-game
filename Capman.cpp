@@ -58,9 +58,6 @@ int main()
 			if(wasTouched(jogador, inimigo, inimigo2))		// se o inimigo tocar no jogador o jogo termina 
 				break;
 			
-			if(cenario[inimigo.linha][inimigo.coluna] == 'g')
-				cenario[inimigo.linha][inimigo.coluna] = '0';
-			
 			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas após captura
 			{
 				qtdMoedas--;
@@ -121,15 +118,15 @@ int main()
 					moverCursor(inimigo2.linha,inimigo2.coluna,true);
 					printf(CIANO "%c%c" CINZA, 178, 178);
 				}
-				moverCursor(2, 17, false);
-				printf(CIANO " *Pegou congelamento*" CINZA);
+				moverCursor(2, 18, false);
+				printf(CIANO "# Inimigo Congelado #" CINZA);
 				moverCursor(25, 0,true);
 				
 			} 
 			if(tempo == 20)		// 20 é o tempo de congelamento, quando chegar nele o inimigo descongela 
 			{
-				moverCursor(2, 17, false);
-				printf("                        ");
+				moverCursor(2, 18, false);
+				printf("                     ");
 				moverCursor(25, 0,true);
 				gelo = false;	
 				tempo = 0;
