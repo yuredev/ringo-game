@@ -23,6 +23,7 @@
 #define FUNDOAZUL "\033[44m"
 #define AMARELO "\033[33m"
 #define ROXO "\033[1;35m"
+#define FUNDOCIANO "\033[46m"
 
 typedef unsigned char uchar;
 
@@ -279,8 +280,8 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 				printf("  ");
 			else if(cenario[i][j] == 'p')					// mostrar paredes
 				printf("%c%c", 178,178);		
-			else if(cenario[i][j] == 'm')					//mostrar moedas
-				printf(AMARELO "* " CINZA);	
+			else if(cenario[i][j] == 'm')					//mostrar aneis
+				printf(AMARELO "o " CINZA);	
 		}
 		printf("%c",219);							// limite do cenário, parede do fim
 		printf("\n");

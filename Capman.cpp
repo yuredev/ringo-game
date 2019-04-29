@@ -51,7 +51,7 @@ int main()
 		qtdMoedas = gerarMoedas(cenario, fase);
 		system("cls");
 		printf("\n\tFase %d", fase);
-		printf("\t\t\t\tMoedas restantes: %d",qtdMoedas);
+		printf("\t\t\t\t Aneis restantes: %d",qtdMoedas);
 		mostrarJogo(cenario, jogador, inimigo, inimigo2);
 		do
 		{	
@@ -68,7 +68,7 @@ int main()
 			if(flag)										   // mostra denovo a moeda que o inimigo passou por cima
 			{
 				moverCursor(posMoeda[0], posMoeda[1], true);
-				printf(AMARELO "*" CINZA);
+				printf(AMARELO "o" CINZA);
 			}
 			if(cenario[inimigo.linha][inimigo.coluna] == 'm') // se o inimigo passar por cima da moeda ela nao desaparece
 			{
@@ -83,7 +83,7 @@ int main()
 				if(flag2)										   		// mostra denovo a moeda que o inimigo passou por cima
 				{
 					moverCursor(posMoeda2[0], posMoeda2[1], true);
-					printf(AMARELO "*" CINZA);
+					printf(AMARELO "o" CINZA);
 				}
 				if(cenario[inimigo2.linha][inimigo2.coluna] == 'm') 	// se o inimigo passar por cima da moeda ela nao desaparece
 				{
@@ -112,18 +112,18 @@ int main()
 			{
 				tempo++;
 				moverCursor(inimigo.linha,inimigo.coluna,true);
-				printf(CIANO "%c%c" CINZA, 178, 178);
+				printf(CIANO "%c%c" CINZA, 178,178);
 				if(fase == 3)
 				{
 					moverCursor(inimigo2.linha,inimigo2.coluna,true);
-					printf(CIANO "%c%c" CINZA, 178, 178);
+					printf(CIANO "%c%c" CINZA, 178,178);
 				}
 				moverCursor(2, 18, false);
 				printf(CIANO "# Inimigo Congelado #" CINZA);
 				moverCursor(25, 0,true);
 				
 			} 
-			if(tempo == 20)		// 20 é o tempo de congelamento, quando chegar nele o inimigo descongela 
+			if(tempo == 25)		// 20 eh o tempo de congelamento, quando chegar nele o inimigo descongela 
 			{
 				moverCursor(2, 18, false);
 				printf("                     ");
