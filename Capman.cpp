@@ -8,10 +8,10 @@
 #define ESPERA 110
 
 /* 
-ObservaÁıes: 
-* Somente compatÌvel com Windows 10
-* para que o manual de jogo seja apresentado, este jogo deve ser iniciado atravÈs 
-da execuÁ„o do programa launchCapman.exe presente na mesma pasta. 
+Observa√ß√µes: 
+* Somente compat√≠vel com Windows 10
+* para que o manual de jogo seja apresentado, este jogo deve ser iniciado atrav√©s 
+da execu√ß√£o do programa launchCapman.exe presente na mesma pasta. 
 */
 
 int main()
@@ -24,7 +24,7 @@ int main()
 	agente jogador, inimigo, inimigo2;
 	char direcao;
 	uchar qtdMoedas;
-	uchar fase = 3;
+	uchar fase = 1;
 	uchar posMoeda[2];
 	uchar posMoeda2[2];
 	bool flag = false;
@@ -53,7 +53,7 @@ int main()
 		mostrarJogo(cenario, jogador, inimigo, inimigo2);
 		do
 		{	
-			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas apÛs captura
+			if(cenario[jogador.linha][jogador.coluna] == 'm')	// Retirar as moedas ap√≥s captura
 			{
 				qtdMoedas--;
 				cenario[jogador.linha][jogador.coluna] = '0';
@@ -90,17 +90,17 @@ int main()
 					flag2 = false;
 			}
 			
-			if(cenario[jogador.linha][jogador.coluna] == 't')							// movimentaÁ„o apÛs teletransporte. v·lido apenas para fase 3
+			if(cenario[jogador.linha][jogador.coluna] == 't')							// movimenta√ß√£o ap√≥s teletransporte. v√°lido apenas para fase 3
 				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';						// identificar qual a porta de teletransporte				
 			
-			jogador = acaoJogador(direcao, jogador, cenario);		// atualizar posiÁ„o do jogador 
+			jogador = acaoJogador(direcao, jogador, cenario);		// atualizar posi√ß√£o do jogador 
 			inimigo = acaoInimigo(inimigo, jogador, cenario);		// atualizar posicao do inimigo
 
 			if(fase == 3)												
 				inimigo2 = acaoInimigo(inimigo2, jogador, cenario);	
 			
 			if(kbhit())												
-				direcao = getch();									// pegar tecla digitada do usu·rio
+				direcao = getch();									// pegar tecla digitada do usu√°rio
 
 			Sleep(ESPERA);
 		}while(qtdMoedas > 0 && !wasTouched(jogador, inimigo, inimigo2));
@@ -124,9 +124,9 @@ int main()
 		printf("Deseja continuar jogando? (S/N): ");
 		do
 		{
-			while(!kbhit());									// laÁo inifinito atÈ usu·rio digitar alguma tecla
+			while(!kbhit());									// la√ßo inifinito at√© usu√°rio digitar alguma tecla
 			direcao = getch();   								// aproveitamento de variaveis 	
-		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // sÛ sai do laÁo se usu·rio digitar opÁıes validas
+		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // s√≥ sai do la√ßo se usu√°rio digitar op√ß√µes validas
 		switch(direcao)
 		{
 			case 'S':
@@ -145,6 +145,6 @@ int main()
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
 	Sleep(2000);
-	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual apÛs termino do jogo
+	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual ap√≥s termino do jogo
 	return 0;
 }
