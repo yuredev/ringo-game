@@ -1,5 +1,5 @@
 # CapmanAlpha 
-## Jogo inspirado no Pacman  
+### Jogo inspirado no Pacman  
 
 ![TelaDeJogo](/tela.PNG)
 
