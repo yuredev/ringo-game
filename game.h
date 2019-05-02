@@ -53,11 +53,33 @@ char opcaoMenu(char tecla, uchar op)
 		case 's':
 			if(op < 3)
 				op++;
-			break;
-		case 13:
-			op = 13;	
 	}
 	return op;		
+}
+
+void manual()
+{
+	system("cls");
+	printf("CONTROLES:\n");
+	printf("\n W - Cima\n S - Baixo\n D - Direita\n A - Esquerda");
+	printf("\n\nOBJETIVO:\n");
+	printf("\n Capture todas as moedas\n para ir para o proximo nivel.\n Nao seja pego pelo inimigo.");
+	printf("\n\nLEGENDA:\n");
+	printf("\n * Jogador: %c",254);
+	printf("\n * Inimigo: " VERMELHO);
+	printf("%c" CINZA, 254);
+	printf("\n * Aneis: " AMARELO);
+	printf("o" CINZA);
+	printf("\n * Teletransporte: " ROXO);
+	printf("%c\n\n" CINZA,178);
+	while(1)
+	{
+		if(kbhit())
+		{
+			if(getch() == 27)	// se o usu�rio teclar esc
+				break;
+		}
+	}
 }
 
 void apresentacao()		// só estética

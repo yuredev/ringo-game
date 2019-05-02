@@ -24,30 +24,40 @@ int main()
 	printf("\n\n\n\t   ");
 	writeLine(51);
 	printf("\n");
-	SetConsoleTitle("*** C A P M A N ***");
+	SetConsoleTitle("*** R I N G O ***");
+	HWND hwnd = GetConsoleWindow();					
+	if(hwnd != NULL) 
+		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
 	do
 	{
-		system("cls");
-		apresentacao();
 		if(kbhit())
 		{
 			tecla = getch();
-			opcao = opcaoMenu(tecla, opcao);
+			if(tecla == 13)								// se o usuário teclar enter 
+			switch(opcao)
+			{
+				case 1: jogo(&fase); break;
+				case 2: manual(); break;
+				case 3:break;
+			}
+			else									// se não foi enter foi a navegação do menu
+				opcao = opcaoMenu(tecla, opcao);
 		}
+		system("cls");
+		apresentacao();
 		printf("\n\n\t\t  ");
 		(opcao == 1) ? printf(FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<-") : printf(" INICIAR JOGO  ");
 		printf("\n\n\t\t  ");
 		(opcao == 2) ? printf(FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<-") : printf(" MANUAL  ");
 		printf("\n\n\t\t  ");
 		(opcao == 3) ? printf(FUNDOBRANCO PRETO " CREDITOS " FUNDOPRETO CINZA " <<-") : printf(" CREDITOS  ");
-		
+		moverCursor(30,1,false);
 		if(opcao != 13)
 		{
 			fflush(stdin);
 			while(!kbhit());
 		}
-	}while(opcao != 13);
-	jogo(&fase);
+	}while(1);
 	return 0;
 }
 
@@ -55,9 +65,6 @@ int main()
 int jogo(uchar *faseInicial)
 {
 	char cenario[25][25];	
-	HWND hwnd = GetConsoleWindow();					
-	if(hwnd != NULL) 
-		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
 	agente jogador, inimigo, inimigo2;
 	char direcao;
 	uchar qtdAneis;
@@ -142,9 +149,12 @@ int jogo(uchar *faseInicial)
 			if(fase == 3 && !gelo)												
 				inimigo2 = acaoInimigo(inimigo2, jogador, cenario, fase);		// atualizar posicao do segundo inimigo
 			
-			if(kbhit())												
+			if(kbhit())
+			{
 				direcao = getch();										// pegar tecla digitada do usuÃ¡rio
-
+				if(direcao == 27)
+					return 0;				
+			}												
 			if(gelo)			// se o inimigo estiver comgelado, tem que ser contado o tempo de congelamento
 			{
 				tempo++;
@@ -180,6 +190,7 @@ int jogo(uchar *faseInicial)
 		{
 			animacaoVitoria(fase);
 			fase++;	
+			*faseInicial++;
 			if(fase == 4)
 			{
 				system("cls");
