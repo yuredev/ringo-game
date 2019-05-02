@@ -8,10 +8,10 @@
 #define ESPERA 110
 
 /* 
-Observações: 
-* Somente compatível com Windows 10
-* para que o manual de jogo seja apresentado, este jogo deve ser iniciado através 
-da execução do programa launchCapman.exe presente na mesma pasta. 
+ObservaÃ§Ãµes: 
+* Somente compatÃ­vel com Windows 10
+* para que o manual de jogo seja apresentado, este jogo deve ser iniciado atravÃ©s 
+da execuÃ§Ã£o do programa launchCapman.exe presente na mesma pasta. 
 */
 
 int jogo(uchar *faseInicial);
@@ -95,7 +95,7 @@ int jogo(uchar *faseInicial)
 			if(wasTouched(jogador, inimigo, inimigo2))		// se o inimigo tocar no jogador o jogo termina 
 				break;
 			
-			if(cenario[jogador.linha][jogador.coluna] == 'a')	// Retirar as Aneis após captura
+			if(cenario[jogador.linha][jogador.coluna] == 'a')	// Retirar as Aneis apÃ³s captura
 			{
 				qtdAneis--;
 				cenario[jogador.linha][jogador.coluna] = '0';
@@ -132,10 +132,10 @@ int jogo(uchar *faseInicial)
 					flag2 = false;
 			}
 			
-			if(cenario[jogador.linha][jogador.coluna] == 't')			// movimentação após teletransporte. válido apenas para fase 3
+			if(cenario[jogador.linha][jogador.coluna] == 't')			// movimentaÃ§Ã£o apÃ³s teletransporte. vÃ¡lido apenas para fase 3
 				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';	// identificar qual a porta de teletransporte				
 			
-			jogador = acaoJogador(direcao, jogador, cenario, &gelo);			// atualizar posição do jogador 
+			jogador = acaoJogador(direcao, jogador, cenario, &gelo);			// atualizar posiÃ§Ã£o do jogador 
 			
 			if(!gelo)
 				inimigo = acaoInimigo(inimigo, jogador, cenario, fase);		// atualizar posicao do inimigo
@@ -143,7 +143,7 @@ int jogo(uchar *faseInicial)
 				inimigo2 = acaoInimigo(inimigo2, jogador, cenario, fase);		// atualizar posicao do segundo inimigo
 			
 			if(kbhit())												
-				direcao = getch();										// pegar tecla digitada do usuário
+				direcao = getch();										// pegar tecla digitada do usuÃ¡rio
 
 			if(gelo)			// se o inimigo estiver comgelado, tem que ser contado o tempo de congelamento
 			{
@@ -191,9 +191,9 @@ int jogo(uchar *faseInicial)
 		printf("Deseja continuar jogando? (S/N): ");
 		do
 		{
-			while(!kbhit());									// laço inifinito até usuário digitar alguma tecla
+			while(!kbhit());									// laÃ§o inifinito atÃ© usuÃ¡rio digitar alguma tecla
 			direcao = getch();   								// aproveitamento de variaveis 	
-		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // só sai do laço se usuário digitar opções validas
+		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // sÃ³ sai do laÃ§o se usuÃ¡rio digitar opÃ§Ãµes validas
 		switch(direcao)
 		{
 			case 'S':
@@ -212,6 +212,6 @@ int jogo(uchar *faseInicial)
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
 	Sleep(2000);
-	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual após termino do jogo
+	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual apÃ³s termino do jogo
 	return 0;
 }
