@@ -22,15 +22,13 @@ int main()
 	printf("CONTROLES:\n");
 	printf("\n W - Cima\n S - Baixo\n D - Direita\n A - Esquerda");
 	printf("\n\nOBJETIVO:\n");
-	printf("\n Capture todos os aneis\n para ir para o proximo nivel.\n Nao seja pego pelo inimigo.");
+	printf("\n Capture todas as moedas\n para ir pra o proximo nivel.\n Nao deixe o inimigo te pegar.");
 	printf("\n\nLEGENDA:\n");
 	printf("\n * Jogador: %c",254);
 	printf("\n * Inimigo: " VERMELHO);
 	printf("%c" CINZA, 254);
-	printf("\n * Aneis: " AMARELO);
-	printf("o" CINZA);
-	printf("\n * Poder de Congelamento: " CIANO);
-	printf("#" CINZA);
+	printf("\n * Moedas: " AMARELO);
+	printf("*" CINZA);
 	printf("\n * Teletransporte: " ROXO);
 	printf("%c\n\n" CINZA,178);
 	getch();
