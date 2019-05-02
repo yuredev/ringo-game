@@ -1,4 +1,4 @@
-# CapmanAlpha 
+# Ringo
 ### Jogo inspirado no Pacman  
 
 ### Tela do Jogo
