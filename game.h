@@ -23,6 +23,7 @@
 #define FUNDOAZUL "\033[44m"
 #define AMARELO "\033[33m"
 #define ROXO "\033[1;35m"
+#define FUNDOBRANCO "\033[47m"
 
 typedef unsigned char uchar;
 
@@ -33,17 +34,53 @@ struct agente		// estrutura do jogador e inimigo
 	char categoria[8];
 };   
 
+char opcaoMenu(char tecla, uchar op)
+{
+	switch(tecla)
+	{
+		case 'W':
+			if(op > 1)
+				op--;
+			break;
+		case 'w':
+			if(op > 1)
+				op--;
+			break;
+		case 'S':
+			if(op < 3)
+				op++;
+			break;
+		case 's':
+			if(op < 3)
+				op++;
+			break;
+		case 13:
+			op = 13;	
+	}
+	return op;		
+}
+
 void apresentacao()		// só estética
 {
-	system("color 0F");
-	printf( BRANCO FUNDOAZUL"\n"
-	"  ------     /\\      ----  |\\        /|    /\\    |\\    | "
-	"\n |          /  \\    |    | | \\      / |   /  \\   | \\   | "
-	"\n |         /----\\   |----  |  \\    /  |  /----\\  |  \\  | "
-	"\n |        /      \\  |      |   \\  /   | /      \\ |   \\ | "
-	"\n  ------ /        \\ |      |    \\/    |/        \\|    \\| \n");
-	
-	printf(" A game based in the popular Pacman developed for Atari  \n\n"CINZA FUNDOPRETO);
+	printf(FUNDOBRANCO PRETO 
+    "\n\t\t                                         "	
+	"\n\t\t %c%c%c%c%c  %c  %c%c     %c   %c%c%c%c%c%c   %c%c%c%c%c%c%c%c%c "
+			"\n\t\t %c   %c  %c  %c%c     %c  %c         %c       %c "
+			"\n\t\t %c   %c  %c  %c %c    %c %c          %c       %c "
+			"\n\t\t %c%c%c%c%c  %c  %c  %c   %c %c    %c%c%c%c%c %c       %c "
+			"\n\t\t %c %c    %c  %c   %c  %c %c        %c %c       %c "
+			"\n\t\t %c  %c   %c  %c    %c %c  %c      %c  %c       %c "
+			"\n\t\t %c   %c  %c  %c     %c%c   %c%c%c%c%c%c   %c%c%c%c%c%c%c%c%c " 
+			"\n\t\t                                         " FUNDOPRETO CINZA
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219
+			,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
 }
 void writeLine(uchar tam)		// escreve uma linha
 {
@@ -123,7 +160,10 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 	}
 	
 	if(cenario[jogador.linha][jogador.coluna] == 'g')
+	{
 		*gelo = true;
+		cenario[jogador.linha][jogador.coluna] = '0';
+	}
 	
 	moverCursor(jogador.linha, jogador.coluna, true);
 	printf("%c",254);
@@ -195,6 +235,9 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar f
 				inimigo.coluna++;
 			break;			
 	}
+	if(cenario[inimigo.linha][inimigo.coluna] == 'g')
+		cenario[inimigo.linha][inimigo.coluna] = '0';
+	
 	moverCursor(inimigo.linha, inimigo.coluna, true);
 	printf(VERMELHO"%c" CINZA, 254);
 	moverCursor(25, 0,true);
@@ -273,8 +316,8 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 				printf("  ");
 			else if(cenario[i][j] == 'p')					// mostrar paredes
 				printf("%c%c", 178,178);		
-			else if(cenario[i][j] == 'm')					//mostrar moedas
-				printf(AMARELO "* " CINZA);	
+			else if(cenario[i][j] == 'a')					//mostrar aneis
+				printf(AMARELO "o " CINZA);	
 		}
 		printf("%c",219);							// limite do cenário, parede do fim
 		printf("\n");
@@ -405,40 +448,50 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 	}		
 }
 
-int gerarMoedas(char cenario[25][25], uchar fase)		// gera os moedas da fase 
+int gerarAneis(char cenario[25][25], uchar fase)		// gera os Aneis da fase 
 {
-	uchar qtdMoedasFase;
+	uchar qtdAneisFase;
 	uchar i,j;
-	uchar qtdMoedas = 0;
+	uchar qtdAneis = 0;
 	srand(time(NULL));
-	switch(fase)						// definir quantas moedas serão geradas de acordo com a fase
+	switch(fase)						// definir quantas Aneis serão geradas de acordo com a fase
 	{
 		case 1:
-			qtdMoedasFase = 20;
+			qtdAneisFase = 20;
 			break;
 		case 2:
-			qtdMoedasFase = 25;
+			qtdAneisFase = 25;
 			break;
 		case 3:
-			qtdMoedasFase = 30;
+			qtdAneisFase = 30;
 	}
 	
-	while(qtdMoedas != qtdMoedasFase) // se a quantidade de moedas geradas nao for igual a quantidade estaebelecida para a fase, as moedas tem que ser geradas novamente. 
+	while(qtdAneis != qtdAneisFase) // se a quantidade de Aneis geradas nao for igual a quantidade estaebelecida para a fase, as Aneis tem que ser geradas novamente. 
 	{
-		qtdMoedas = 0;
+		qtdAneis = 0;
 		for(i = 0; i < 25; i++)
 			for(j = 0; j < 25; j++)
 			{
-				if(cenario[i][j] == 'm')
+				if(cenario[i][j] == 'a')
 					cenario[i][j] = '0';
-				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posição vazia do cenário tem 1/25 % de chance de ser gerada uma moeda.
+				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posição vazia do cenário tem 1/25 % de chance de ser gerada uma .
 				{	
-					cenario[i][j] = 'm';
-					qtdMoedas++;
+					cenario[i][j] = 'a';
+					qtdAneis++;
 				}		
 			}			
 	}	
-	return qtdMoedas;		
+	return qtdAneis;		
+}
+
+void mostrarMenu()
+{
+	uchar i;
+	for(i = 10; i <= 40; i++)
+	{
+		moverCursor(25,i,false);	
+		printf("%c",219);
+	}
 }
 
 void animacaoDerrota()	// apenas para estética
