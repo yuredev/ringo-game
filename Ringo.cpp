@@ -14,6 +14,7 @@ Observa√ß√µes:
 da execu√ß√£o do programa launchCapman.exe presente na mesma pasta. 
 */
 
+void manual();
 int jogo(uchar *faseInicial);
 
 int main()
@@ -27,31 +28,48 @@ int main()
 	SetConsoleTitle("*** R I N G O ***");
 	HWND hwnd = GetConsoleWindow();					
 	if(hwnd != NULL) 
-		MoveWindow(hwnd ,130,50 ,590, 600, TRUE); 
+		MoveWindow(hwnd ,150,50 ,590, 425, TRUE); 
 	do
 	{
 		if(kbhit())
 		{
 			tecla = getch();
 			if(tecla == 13)								// se o usu·rio teclar enter 
-			switch(opcao)
-			{
-				case 1: jogo(&fase); break;
-				case 2: manual(); break;
-				case 3:break;
-			}
+				switch(opcao)
+				{
+					case 1: 
+						jogo(&fase); 
+						if(hwnd != NULL) 
+							MoveWindow(hwnd ,150,50 ,590, 425, TRUE); 
+						break;
+					case 2: 
+						manual(); 
+						break;
+					case 3:
+						
+						break;
+					case 4:
+						return 0;
+						break;	
+				}
 			else									// se n„o foi enter foi a navegaÁ„o do menu
 				opcao = opcaoMenu(tecla, opcao);
 		}
 		system("cls");
 		apresentacao();
 		printf("\n\n\t\t  ");
-		(opcao == 1) ? printf(FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<-") : printf(" INICIAR JOGO  ");
+		(opcao == 1) ? printf(FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<=") : printf(" INICIAR JOGO  ");
 		printf("\n\n\t\t  ");
-		(opcao == 2) ? printf(FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<-") : printf(" MANUAL  ");
+		(opcao == 2) ? printf(FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<=") : printf(" MANUAL  ");
 		printf("\n\n\t\t  ");
-		(opcao == 3) ? printf(FUNDOBRANCO PRETO " CREDITOS " FUNDOPRETO CINZA " <<-") : printf(" CREDITOS  ");
-		moverCursor(30,1,false);
+		(opcao == 3) ? printf(FUNDOBRANCO PRETO " CREDITOS " FUNDOPRETO CINZA " <<=") : printf(" CREDITOS  ");
+		printf("\n\n\t\t  ");
+		(opcao == 4) ? printf(FUNDOBRANCO PRETO " SAIR " FUNDOPRETO CINZA " <<=") : printf(" SAIR  ");
+		printf("\n\n\n\n\n\t\t ");
+		printf(AMARELO"Navegacao: "CINZA);
+		printf("\n\t\t ");
+		printf(AMARELO"W - cima, S - baixo, Enter - Confirmar" CINZA);
+		moverCursor(20,1,false);
 		if(opcao != 13)
 		{
 			fflush(stdin);
@@ -60,7 +78,6 @@ int main()
 	}while(1);
 	return 0;
 }
-
 
 int jogo(uchar *faseInicial)
 {
@@ -76,6 +93,9 @@ int jogo(uchar *faseInicial)
 	bool flag = false;
 	bool flag2 = false;
 	bool continuarJogo = true;
+	HWND hwnd = GetConsoleWindow();					
+	if(hwnd != NULL) 
+		MoveWindow(hwnd ,150,50 ,590, 600, TRUE); 
 	strcpy(jogador.categoria, "jogador");
 	strcpy(inimigo.categoria, "inimigo");
 	strcpy(inimigo2.categoria, "inimigo2");
@@ -225,4 +245,31 @@ int jogo(uchar *faseInicial)
 	Sleep(2000);
 	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual ap√≥s termino do jogo
 	return 0;
+}
+
+void manual()
+{
+	system("cls");
+	printf("CONTROLES:\n");
+	printf("\n W - Cima\n S - Baixo\n D - Direita\n A - Esquerda");
+	printf("\n ESC - Menu anterior");
+	printf("\n\nOBJETIVO:\n");
+	printf("\n Capture todas as moedas\n para ir para o proximo nivel.\n Nao seja pego pelo inimigo.");
+	printf("\n\nLEGENDA:\n");
+	printf("\n * Jogador: %c",254);
+	printf("\n * Inimigo: " VERMELHO);
+	printf("%c" CINZA, 254);
+	printf("\n * Aneis: " AMARELO);
+	printf("o" CINZA);
+	printf("\n * Teletransporte: " ROXO);
+	printf("%c\n\n" CINZA,178);
+	printf(" Pressione ESC para voltar");
+	while(1)
+	{
+		if(kbhit())
+		{
+			if(getch() == 27)	// se o usu·rio teclar esc
+				break;
+		}
+	}
 }
