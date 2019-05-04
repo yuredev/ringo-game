@@ -265,11 +265,7 @@ void manual()
 	printf("%c\n\n" CINZA,178);
 	printf(" Pressione ESC para voltar");
 	while(1)
-	{
 		if(kbhit())
-		{
 			if(getch() == 27)	// se o usuário teclar esc
 				break;
-		}
-	}
 }
