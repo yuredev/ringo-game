@@ -46,26 +46,22 @@ int main()
 						manual(); 
 						break;
 					case 3:
-						
-						break;
-					case 4:
 						return 0;
-						break;	
 				}
 			else									// se não foi enter foi a navegação do menu
 				opcao = opcaoMenu(tecla, opcao);
 		}
 		system("cls");
 		apresentacao();
-		printf("\n\n\t\t  ");
+		printf("\n\n\n\t\t  ");
 		(opcao == 1) ? printf(FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<=") : printf(" INICIAR JOGO  ");
 		printf("\n\n\t\t  ");
 		(opcao == 2) ? printf(FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<=") : printf(" MANUAL  ");
 		printf("\n\n\t\t  ");
-		(opcao == 3) ? printf(FUNDOBRANCO PRETO " CREDITOS " FUNDOPRETO CINZA " <<=") : printf(" CREDITOS  ");
-		printf("\n\n\t\t  ");
-		(opcao == 4) ? printf(FUNDOBRANCO PRETO " SAIR " FUNDOPRETO CINZA " <<=") : printf(" SAIR  ");
-		printf("\n\n\n\n\n\t\t ");
+		(opcao == 3) ? printf(FUNDOBRANCO PRETO " SAIR " FUNDOPRETO CINZA " <<=") : printf(" SAIR  ");
+	
+		 
+		printf("\n\n\n\n\n\n\t\t ");
 		printf(AMARELO"Navegacao: "CINZA);
 		printf("\n\t\t ");
 		printf(AMARELO"W - cima, S - baixo, Enter - confirmar" CINZA);

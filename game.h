@@ -47,11 +47,11 @@ char opcaoMenu(char tecla, uchar op)
 				op--;
 			break;
 		case 'S':
-			if(op < 4)
+			if(op < 3)
 				op++;
 			break;
 		case 's':
-			if(op < 4)
+			if(op < 3)
 				op++;
 	}
 	return op;		
