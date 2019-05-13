@@ -7,4 +7,4 @@ Capturando todos os aneis é possível passar de fase. O jogo atualmente conta c
 ![Menu](RingoMenu.PNG)
 <br />
 ## Tela de Jogo 
-![Menu](RingoJogo.PNG)
+![TelaDeJogo](RingoJogo.PNG)
