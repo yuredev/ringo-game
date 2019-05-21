@@ -9,7 +9,7 @@
 
 /* 
 ObservaÃ§Ãµes: 
-* Somente compatÃ­vel com Windows 10
+* Somente compativel com o Windows 10
 * para que o manual de jogo seja apresentado, este jogo deve ser iniciado atravÃ©s 
 da execuÃ§Ã£o do programa launchCapman.exe presente na mesma pasta. 
 */
@@ -242,6 +242,21 @@ int jogo(uchar *faseInicial)
 	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual apÃ³s termino do jogo
 	return 0;
 }
+
+void creditos()
+{
+	system("cls");	
+	printf("CREDITOS:\n");
+	printf("\n Esse jogo foi desenvolvido por Yure Matias de Oliveira" 
+	       "\n como trabalho da terceira unidade da disciplina do curso de "
+	       "\n Analise e Desenvolvimento de Sistemas ofertado pela UFRN"
+	       "\n e situado na Escola Agricola de Jundiai - UFRN");
+	printf("\n\n Pressione ESC para voltar");
+	while(1)
+		if(kbhit())
+			if(getch() == 27)	// se o usuário teclar esc
+				break;
+}	
 
 void manual()
 {
