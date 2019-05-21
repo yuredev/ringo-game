@@ -243,6 +243,39 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar f
 	return inimigo;
 }
 
+int gerarAneis(char cenario[25][25], uchar fase)		// gera os Aneis da fase 
+{
+	uchar qtdAneisFase;
+	uchar l,c;
+	srand(time(NULL));
+	switch(fase)						// definir quantas Aneis serÃ£o geradas de acordo com a fase
+	{
+		case 1:
+			qtdAneisFase = 20;
+			break;
+		case 2:
+			qtdAneisFase = 25;
+			break;
+		case 3:
+			qtdAneisFase = 30;
+	}
+	
+	for(int i = 0; i <= qtdAneisFase; i++)
+	{
+		do
+		{
+			l = rand() % 25;
+			c = rand() % 25;
+			if(cenario[l][c] == '0')
+			{
+				cenario[l][c] = 'a';
+				break;
+			}
+		}while(cenario[l][c] != '0');
+	}
+	return qtdAneisFase;		
+}
+
 agente resetarPosicoes(agente x, uchar fase)	// função que reseta as posicoes do agente de acordo com a fase 
 {
 	switch(fase)
@@ -445,42 +478,6 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 					cenario[17][j] = 'p';					
 			}
 	}		
-}
-
-int gerarAneis(char cenario[25][25], uchar fase)		// gera os Aneis da fase 
-{
-	uchar qtdAneisFase;
-	uchar i,j;
-	uchar qtdAneis = 0;
-	srand(time(NULL));
-	switch(fase)						// definir quantas Aneis serÃ£o geradas de acordo com a fase
-	{
-		case 1:
-			qtdAneisFase = 20;
-			break;
-		case 2:
-			qtdAneisFase = 25;
-			break;
-		case 3:
-			qtdAneisFase = 30;
-	}
-	
-	while(qtdAneis != qtdAneisFase) // se a quantidade de Aneis geradas nao for igual a quantidade estaebelecida para a fase, as Aneis tem que ser geradas novamente. 
-	{
-		qtdAneis = 0;
-		for(i = 0; i < 25; i++)
-			for(j = 0; j < 25; j++)
-			{
-				if(cenario[i][j] == 'a')
-					cenario[i][j] = '0';
-				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posiÃ§Ã£o vazia do cenÃ¡rio tem 1/25 % de chance de ser gerada uma .
-				{	
-					cenario[i][j] = 'a';
-					qtdAneis++;
-				}		
-			}			
-	}	
-	return qtdAneis;		
 }
 
 void mostrarMenu()
