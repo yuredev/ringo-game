@@ -47,11 +47,11 @@ char opcaoMenu(char tecla, uchar op)
 				op--;
 			break;
 		case 'S':
-			if(op < 3)
+			if(op < 4)
 				op++;
 			break;
 		case 's':
-			if(op < 3)
+			if(op < 4)
 				op++;
 	}
 	return op;		
@@ -260,7 +260,7 @@ int gerarAneis(char cenario[25][25], uchar fase)		// gera os Aneis da fase
 			qtdAneisFase = 30;
 	}
 	
-	for(int i = 0; i <= qtdAneisFase; i++)
+	for(int i = 0; i < qtdAneisFase; i++)
 	{
 		do
 		{
@@ -478,16 +478,6 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 					cenario[17][j] = 'p';					
 			}
 	}		
-}
-
-void mostrarMenu()
-{
-	uchar i;
-	for(i = 10; i <= 40; i++)
-	{
-		moverCursor(25,i,false);	
-		printf("%c",219);
-	}
 }
 
 void animacaoDerrota()	// apenas para estÃ©tica

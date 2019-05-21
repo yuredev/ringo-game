@@ -14,6 +14,8 @@ ObservaÃ§Ãµes:
 da execuÃ§Ã£o do programa launchCapman.exe presente na mesma pasta. 
 */
 
+void mostrarMenu(char opcao);
+void creditos();
 void manual();
 int jogo(uchar *faseInicial);
 
@@ -46,22 +48,19 @@ int main()
 						manual(); 
 						break;
 					case 3:
-						return 0;
+						MoveWindow(hwnd ,150,50 ,590, 300, TRUE); 
+						creditos();
+						MoveWindow(hwnd ,150,50 ,590, 425, TRUE); 
+						break;
+					case 4: 
+						return 0;	
 				}
-			else									// se não foi enter foi a navegação do menu
+			else									// se a tecla digitada nao for enter eh pq talvez foi alguma opcao do menu
 				opcao = opcaoMenu(tecla, opcao);
 		}
 		system("cls");
 		apresentacao();
-		printf("\n\n\n\t\t  ");
-		(opcao == 1) ? printf(FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<=") : printf(" INICIAR JOGO  ");
-		printf("\n\n\t\t  ");
-		(opcao == 2) ? printf(FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<=") : printf(" MANUAL  ");
-		printf("\n\n\t\t  ");
-		(opcao == 3) ? printf(FUNDOBRANCO PRETO " SAIR " FUNDOPRETO CINZA " <<=") : printf(" SAIR  ");
-	
-		 
-		printf("\n\n\n\n\n\n\t\t ");
+		mostrarMenu(opcao);							// apenas mostra o menu de acordo com as opcoes 
 		printf(AMARELO"Navegacao: "CINZA);
 		printf("\n\t\t ");
 		printf(AMARELO"W - cima, S - baixo, Enter - confirmar" CINZA);
@@ -168,18 +167,21 @@ int jogo(uchar *faseInicial)
 			if(kbhit())
 			{
 				direcao = getch();										// pegar tecla digitada do usuÃ¡rio
-				if(direcao == 27)
+				if(direcao == 27)										// se o usuario deigitar ESC o jogo volta ao menu
+				{
+					moverCursor(1,1,false);							// so pra melhorar a transicao da troca de tela 
 					return 0;				
+				}
 			}												
 			if(gelo)			// se o inimigo estiver comgelado, tem que ser contado o tempo de congelamento
 			{
 				tempo++;
 				moverCursor(inimigo.linha,inimigo.coluna,true);
-				printf(CIANO "%c%c" CINZA, 178,178);
+				printf(CIANO "%c%c" CINZA,178,178);
 				if(fase == 3)
 				{
 					moverCursor(inimigo2.linha,inimigo2.coluna,true);
-					printf(CIANO "%c%c" CINZA, 178,178);
+					printf(CIANO "%c%c" CINZA,178,178);
 				}
 				moverCursor(2, 18, false);
 				printf(CIANO "# Inimigo Congelado #" CINZA);
@@ -201,7 +203,6 @@ int jogo(uchar *faseInicial)
 		moverCursor(32, 9, false);
 		if(qtdAneis > 0)
 			animacaoDerrota();	
-		
 		else
 		{
 			animacaoVitoria(fase);
@@ -218,7 +219,6 @@ int jogo(uchar *faseInicial)
 		printf("Deseja continuar jogando? (S/N): ");
 		do
 		{
-			while(!kbhit());									// laÃ§o inifinito atÃ© usuÃ¡rio digitar alguma tecla
 			direcao = getch();   								// aproveitamento de variaveis 	
 		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // sÃ³ sai do laÃ§o se usuÃ¡rio digitar opÃ§Ãµes validas
 		switch(direcao)
@@ -248,16 +248,17 @@ void creditos()
 	system("cls");	
 	printf("CREDITOS:\n");
 	printf("\n Esse jogo foi desenvolvido por Yure Matias de Oliveira" 
-	       "\n como trabalho da terceira unidade da disciplina do curso de "
-	       "\n Analise e Desenvolvimento de Sistemas ofertado pela UFRN"
-	       "\n e situado na Escola Agricola de Jundiai - UFRN");
-	printf("\n\n Para mais informacoes acesse: ");
-	printf(AZUL " https://github.com/Yurematias" CINZA);
-	printf("\n\n Pressione ESC para voltar");
-	while(1)
-		if(kbhit())
-			if(getch() == 27)	// se o usuário teclar esc
-				break;
+	       "\n como trabalho da terceira unidade da disciplina de logica"
+	       "\n computacional e algoritmos ofertada pela professora"  
+	       "\n Laura Emmanoela Alves dos Santos Santana de Oliveira, no"
+	       "\n curso de tecnologo em Analise e Desenvolvimento de Sistemas" 
+		   "\n da Universidade Federal do Rio Grande do Norte(UFRN) campus"
+	       "\n de Macaiba, onde se situa a Escola Agricola de Jundiai(EAJ).");
+	printf("\n\n Acesse: ");
+	printf(AZUL "https://github.com/Yurematias/Ringo-Game" CINZA);
+	printf("\n\nPressione ESC para voltar");
+	
+	while(getch() != 27); // 27 eh o numero correspondente ao ESC da tabela ASCII
 }	
 
 void manual()
@@ -265,7 +266,7 @@ void manual()
 	system("cls");
 	printf("CONTROLES:\n");
 	printf("\n W - Cima\n S - Baixo\n D - Direita\n A - Esquerda");
-	printf("\n ESC - Menu anterior");
+	printf("\n ESC - Voltar ao menu");
 	printf("\n\nOBJETIVO:\n");
 	printf("\n Capture todas as moedas\n para ir para o proximo nivel.\n Nao seja pego pelo inimigo.");
 	printf("\n\nLEGENDA:\n");
@@ -274,11 +275,23 @@ void manual()
 	printf("%c" CINZA, 254);
 	printf("\n * Aneis: " AMARELO);
 	printf("o" CINZA);
+	printf("\n * Congelar Inimigo : " CIANO);
+	printf("#" CINZA);
 	printf("\n * Teletransporte: " ROXO);
 	printf("%c\n\n" CINZA,178);
 	printf(" Pressione ESC para voltar");
-	while(1)
-		if(kbhit())
-			if(getch() == 27)	// se o usuário teclar esc
-				break;
+	while(getch() != 27); // 27 eh o numero correspondente ao ESC da tabela ASCII
+}
+
+void mostrarMenu(char opcao)
+{
+	printf("\n\n\n\t\t  ");
+	(opcao == 1) ? printf(FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<=") : printf(" INICIAR JOGO  ");
+	printf("\n\n\t\t  ");
+	(opcao == 2) ? printf(FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<=") : printf(" MANUAL  ");
+	printf("\n\n\t\t  ");
+	(opcao == 3) ? printf(FUNDOBRANCO PRETO " CREDITOS " FUNDOPRETO CINZA " <<=") : printf(" CREDITOS  ");
+	printf("\n\n\t\t  ");
+	(opcao == 4) ? printf(FUNDOBRANCO PRETO " SAIR " FUNDOPRETO CINZA " <<=") : printf(" SAIR  ");
+	printf("\n\n\n\n\t\t ");
 }
