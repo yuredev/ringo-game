@@ -251,6 +251,8 @@ void creditos()
 	       "\n como trabalho da terceira unidade da disciplina do curso de "
 	       "\n Analise e Desenvolvimento de Sistemas ofertado pela UFRN"
 	       "\n e situado na Escola Agricola de Jundiai - UFRN");
+	printf("\n\n Para mais informacoes acesse: ");
+	printf(AZUL " https://github.com/Yurematias" CINZA);
 	printf("\n\n Pressione ESC para voltar");
 	while(1)
 		if(kbhit())
