@@ -57,7 +57,7 @@ char opcaoMenu(char tecla, uchar op)
 	return op;		
 }
 
-void apresentacao()		// só estética
+void apresentacao()		// sÃ³ estÃ©tica
 {
 	printf(FUNDOBRANCO PRETO 
     "\n\t\t                                         "	
@@ -118,7 +118,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 	if(cenario[jogador.linha][jogador.coluna] == 't')	// teletransporte
 		jogador = teletransporte(jogador, cenario);
 		
-	else			// se n�o for teleteransportar a movimenta��o ocorre normalmente 
+	else			// se não for teleteransportar a movimentação ocorre normalmente 
 	{
 		switch(direcao)	// apenas para aceitar caps lock
 		{
@@ -138,7 +138,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 		switch(direcao)
 		{
 			case 'w':
-				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador só mexe se a próxima casa não houver paredes. isso se aplica aos outros cases
+				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador sÃ³ mexe se a prÃ³xima casa nÃ£o houver paredes. isso se aplica aos outros cases
 					jogador.linha--;
 				break;	
 			case 'a':
@@ -156,6 +156,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 		}	
 	}
 	
+	// verifica se o jogador pegou o gelo e se sim ele seta o valor de gelo para verdadeiro
 	if(cenario[jogador.linha][jogador.coluna] == 'g')
 	{
 		*gelo = true;
@@ -168,6 +169,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 	return jogador;	
 }
 
+// função que mexe o inimigo no cenario 
 agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar fase)
 {
 	char direcao;
@@ -175,7 +177,7 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar f
 	moverCursor(inimigo.linha, inimigo.coluna, true);
 	printf("  ");	
 	
-	// verifica��o parar desvio de paredes, a primeira parte � apenas para na fase 3 o jogador n�o desviar da parede que preenche a tela inteira.
+	// verificação parar desvio de paredes, a primeira parte é apenas para na fase 3 o jogador não desviar da parede que preenche a tela inteira.
 	if(!(fase == 3 && (inimigo.linha == 6 || inimigo.linha)) && !strcmp(inimigo.categoria,"inimigo") && ((inimigo.linha < jogador.linha && cenario[inimigo.linha + 1][inimigo.coluna] == 'p') || (inimigo.linha > jogador.linha && cenario[inimigo.linha - 1][inimigo.coluna] == 'p')))
 	{
 		if(jogador.coluna > 12)
@@ -184,28 +186,28 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar f
 			direcao = 'a';
 	}	
 	else 
-	if(inimigo.linha == jogador.linha)				// reta para linhas iguais
+	if(inimigo.linha == jogador.linha)	// se o inimigo tiver na mesma linha do jogador ele move-se em linha reta 
 	{
 		if(inimigo.coluna < jogador.coluna)
 			direcao = 'd';
 		else 
 			direcao = 'a';	
 	}		 
-	else if(inimigo.coluna == jogador.coluna)			// reta para colunas iguais
+	else if(inimigo.coluna == jogador.coluna)    // se o inimigo tiver na mesma coluna do jogador ele move-se em linha reta 
 	{
 		if(inimigo.linha < jogador.linha)
 			direcao = 's';
 		else
 			direcao = 'w';	
 	}
-	else if(rand() % 2 == 0)      // movimentação eixo x
+	else if(rand() % 2 == 0)      // 50% de chance do inimigo mover-se no eixo horizontal 
 	{		
 		if(inimigo.coluna < jogador.coluna)
 			direcao = 'd';
 		else 
 			direcao = 'a';	
 	}
-	else					// movimentação eixo y
+	else					// 50% de chance do inimigo mover-se no eixo vertical 
 	{
 		if(inimigo.linha < jogador.linha)
 			direcao = 's';
@@ -216,23 +218,23 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar f
 	switch(direcao)
 	{
 		case 'w':
-			if(cenario[inimigo.linha-1][inimigo.coluna] != 'p')
+			if(cenario[inimigo.linha-1][inimigo.coluna] != 'p')  // não ultrapassar paredes
 				inimigo.linha--; 
 			break;
 		case 's':
-			if(cenario[inimigo.linha+1][inimigo.coluna] != 'p')
+			if(cenario[inimigo.linha+1][inimigo.coluna] != 'p') // " "
 				inimigo.linha++;
 			break;
 		case 'a':
-			if(cenario[inimigo.linha][inimigo.coluna-1] != 'p')
+			if(cenario[inimigo.linha][inimigo.coluna-1] != 'p')  // " "
 				inimigo.coluna--;
 			break;
 		case 'd':
-			if(cenario[inimigo.linha][inimigo.coluna+1] != 'p')
+			if(cenario[inimigo.linha][inimigo.coluna+1] != 'p') // " "
 				inimigo.coluna++;
 			break;			
 	}
-	if(cenario[inimigo.linha][inimigo.coluna] == 'g')
+	if(cenario[inimigo.linha][inimigo.coluna] == 'g')       // se o inimigo passar por cima do gelo, o gelo desaparece 
 		cenario[inimigo.linha][inimigo.coluna] = '0';
 	
 	moverCursor(inimigo.linha, inimigo.coluna, true);
@@ -241,52 +243,52 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar f
 	return inimigo;
 }
 
-agente resetarPosicoes(agente x, uchar fase)		// metodo que reseta posicoes do jogador ou do inimigo. agente X é genérico
+agente resetarPosicoes(agente x, uchar fase)	// função que reseta as posicoes do agente de acordo com a fase 
 {
 	switch(fase)
 	{
 		case 1:
-			if(!strcmp(x.categoria, "inimigo"))
+			if(!strcmp(x.categoria, "inimigo"))	// se o agente for inimigo
 			{
 				x.linha = 16;
 				x.coluna = 10;
 			}
-			else				// se for jogador 
+			else				// se o agente  for jogador 
 			{
 				x.linha = 3;
 				x.coluna = 9;
 			}
 			break;
 		case 2:
-			if(!strcmp(x.categoria, "inimigo"))
+			if(!strcmp(x.categoria, "inimigo"))	// se o agente for inimigo
 			{
 				x.linha = 20;
 				x.coluna = 21;
 			}
-			else					// se for jogador 
+			else					// se o agente for jogador 
 			{
 				x.linha = 0;
 				x.coluna = 10;
 			}
 			break;
 		case 3:
-			if(!strcmp(x.categoria, "inimigo"))
+			if(!strcmp(x.categoria, "inimigo"))	//se o agente for inimigo 
 			{
 				x.linha = 7;
 				x.coluna = 22;
 			}
-			else if(!strcmp(x.categoria, "jogador"))
+			else if(!strcmp(x.categoria, "jogador"))  // se o agente for jogador 
 			{
 				x.coluna = 0;
 				x.linha = 22;
-			}
-			else 
-			{
+			}			
+			else 			// se o agente for o segundo inimigo da fase 3
+			{				
 				x.linha = 5;
 				x.coluna = 6;
 			}
 	}	
-	return x;
+	return x;			
 }
 
 void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente inimigo2)		// mostra a tela de jogo 
@@ -296,7 +298,7 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 	writeLine(52);
 	for(i = 0; i < 25; i++)
 	{
-		printf("\t%c",219);									// limite do cenário, parede do ínicio
+		printf("\t%c",219);									// limite do cenÃ¡rio, parede do Ã­nicio
 		for(j = 0; j < 25; j++)
 		{
 			if(cenario[i][j] == 't')					//mostrar teletransporte
@@ -309,14 +311,14 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 				printf(VERMELHO "%c " CINZA,254);
 			else if(i == jogador.linha && j == jogador.coluna)	// mostrar jogador 	
 				printf("%c ",254);							
-			else if(cenario[i][j] == '0')					// mostrar espaço vazio
+			else if(cenario[i][j] == '0')					// mostrar espaÃ§o vazio
 				printf("  ");
 			else if(cenario[i][j] == 'p')					// mostrar paredes
 				printf("%c%c", 178,178);		
 			else if(cenario[i][j] == 'a')					//mostrar aneis
 				printf(AMARELO "o " CINZA);	
 		}
-		printf("%c",219);							// limite do cenário, parede do fim
+		printf("%c",219);							// limite do cenÃ¡rio, parede do fim
 		printf("\n");
 	}
 	printf("\t");
@@ -324,7 +326,7 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 	printf("\n\t");						
 }
 
-bool wasTouched(agente jogador, agente inimigo, agente inimigo2)	// verifica se o jogador tocou no inimigo 
+bool wasTouched(agente jogador, agente inimigo, agente inimigo2)    // verifica se o jogador tocou no inimigo 
 {
 	bool touch = false; 
 	if((jogador.linha == inimigo.linha && jogador.coluna == inimigo.coluna) || (jogador.linha == inimigo2.linha && jogador.coluna == inimigo2.coluna))
@@ -340,7 +342,7 @@ bool wasTouched(agente jogador, agente inimigo, agente inimigo2)	// verifica se 
 	return touch;
 }
 
-void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])	// constrói uma parede no cenário do jogo 
+void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])	// constroi uma parede horizontal no cenario do jogo 
 {
 	for(; inicioParede <= fimParede; inicioParede++)
 		cenario[linha][inicioParede] = 'p';
@@ -353,7 +355,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 	for(i = 0; i < 25; i++)			// zerar cenario para construir o novo 
 		for(j = 0; j < 25; j++)
 			cenario[i][j] = '0';
-	switch(fase)					// monta as paredes do cenário de acordo com a fase 
+	switch(fase)					// monta as paredes do cenario de acordo com a fase 
 	{
 		case 1:
 			
@@ -383,7 +385,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 			
 			for(j = 1; j < 24; j++)   
 			{
-				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
+				if((j+2) % 2 == 1)   // j + 2 para nao dar erro na divisÃ£o por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
 					cenario[10][j] = 'p';
 					cenario[14][j] = 'p';
@@ -400,7 +402,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 			break;	
 		case 3:
 			cenario[1][5] = 'g';
-			cenario[0][24] = 't';
+			cenario[0][24] = 't';			// teletransportes
 			cenario[1][24] = 't';
 			fazerParede(24, 0, 24, cenario);
 			cenario[24][11] = 't';
@@ -425,7 +427,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 			fazerParede(6, 0, 24, cenario);
 			for(j = 1; j < 24; j++)   
 			{
-				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
+				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisÃ£o por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
 					cenario[9][j] = 'p';
 				}
@@ -435,7 +437,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)	// monta o 
 			fazerParede(14, 2, 22, cenario);
 			for(j = 1; j < 24; j++)   
 			{
-				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisão por 2. numero par + 2 continua par. impar + 2 continua impar
+				if((j+2) % 2 == 1)		// j + 2 para nao dar erro na divisÃ£o por 2. numero par + 2 continua par. impar + 2 continua impar
 				{							
 					cenario[19][j] = 'p';
 				}
@@ -451,7 +453,7 @@ int gerarAneis(char cenario[25][25], uchar fase)		// gera os Aneis da fase
 	uchar i,j;
 	uchar qtdAneis = 0;
 	srand(time(NULL));
-	switch(fase)						// definir quantas Aneis serão geradas de acordo com a fase
+	switch(fase)						// definir quantas Aneis serÃ£o geradas de acordo com a fase
 	{
 		case 1:
 			qtdAneisFase = 20;
@@ -471,7 +473,7 @@ int gerarAneis(char cenario[25][25], uchar fase)		// gera os Aneis da fase
 			{
 				if(cenario[i][j] == 'a')
 					cenario[i][j] = '0';
-				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posição vazia do cenário tem 1/25 % de chance de ser gerada uma .
+				if(rand() % 25 == 0 && cenario[i][j] == '0') // cada posiÃ§Ã£o vazia do cenÃ¡rio tem 1/25 % de chance de ser gerada uma .
 				{	
 					cenario[i][j] = 'a';
 					qtdAneis++;
@@ -491,7 +493,7 @@ void mostrarMenu()
 	}
 }
 
-void animacaoDerrota()	// apenas para estética
+void animacaoDerrota()	// apenas para estÃ©tica
 {	
 	uchar tempo = 100;    
 	printf("G");
@@ -519,7 +521,7 @@ void animacaoDerrota()	// apenas para estética
 	printf("!\n\n\t");	
 }
 
-void animacaoVitoria(uchar fase)	// apenas para estética
+void animacaoVitoria(uchar fase)	// apenas para estÃ©tica
 {
 	uchar tempo = 100;
 	printf("F");
