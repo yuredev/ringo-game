@@ -154,10 +154,10 @@ int jogo(uchar *faseInicial)
 					flag2 = false;
 			}
 			
-			if(cenario[jogador.linha][jogador.coluna] == 't')			// movimentaÃ§Ã£o apÃ³s teletransporte. vÃ¡lido apenas para fase 3
+			if(cenario[jogador.linha][jogador.coluna] == 't')			// movimentao apos teletransporte. valido apenas para fase 3
 				(jogador.linha < 5) ? direcao = 'w' : direcao = 'a';	// identificar qual a porta de teletransporte				
 			
-			jogador = acaoJogador(direcao, jogador, cenario, &gelo);			// atualizar posiÃ§Ã£o do jogador 
+			jogador = acaoJogador(direcao, jogador, cenario, &gelo);			// atualizar posicao do jogador 
 			
 			if(!gelo)
 				inimigo = acaoInimigo(inimigo, jogador, cenario, fase);		// atualizar posicao do inimigo
@@ -220,7 +220,7 @@ int jogo(uchar *faseInicial)
 		do
 		{
 			direcao = getch();   								// aproveitamento de variaveis 	
-		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // sÃ³ sai do laÃ§o se usuÃ¡rio digitar opÃ§Ãµes validas
+		}while(direcao != 's' && direcao != 'n' && direcao != 'S' && direcao != 'N');   // somente sai do laco se usuario digitar opcoes validas
 		switch(direcao)
 		{
 			case 'S':
@@ -239,7 +239,7 @@ int jogo(uchar *faseInicial)
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
 	Sleep(2000);
-	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual apÃ³s termino do jogo
+	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual apos termino do jogo
 	return 0;
 }
 
