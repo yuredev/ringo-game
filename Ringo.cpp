@@ -8,10 +8,10 @@
 #define ESPERA 110
 
 /* 
-ObservaÃ§Ãµes: 
+Observacoes: 
 * Somente compativel com o Windows 10
 * para que o manual de jogo seja apresentado, este jogo deve ser iniciado atravÃ©s 
-da execuÃ§Ã£o do programa launchCapman.exe presente na mesma pasta. 
+da execucao do programa launchCapman.exe presente na mesma pasta. 
 */
 
 void mostrarMenu(char opcao);
