@@ -5,21 +5,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
-
-//cores em ANSI utilizadas 
-#define CIANO "\033[36m"
-#define PRETO "\033[30m"
-#define AZUL "\033[34m"  
-#define VERMELHO "\x1b[31m" 
-#define CINZA     "\e[0;37m"
-#define BRANCO "\033[37m"
-#define VERDE "\033[32m"
-#define BRANCO "\033[37m"
-#define FUNDOPRETO "\033[0;0m" 
-#define FUNDOAZUL "\033[44m"
-#define AMARELO "\033[33m"
-#define ROXO "\033[1;35m"
-#define FUNDOBRANCO "\033[47m"
+#include "colors.h"
 
 typedef unsigned char uchar;
 
