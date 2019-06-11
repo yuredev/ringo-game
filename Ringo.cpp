@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <conio.h>
-#include <stdbool.h>
 #include "game.h"
 
 #define ESPERA 110
@@ -17,7 +12,7 @@ da execucao do programa launchCapman.exe presente na mesma pasta.
 void mostrarMenu(char opcao);
 void creditos();
 void manual();
-int jogo(uchar *faseInicial);
+int jogo(uchar fase);
 
 int main()
 {
@@ -40,7 +35,7 @@ int main()
 				switch(opcao)
 				{
 					case 1: 
-						jogo(&fase); 
+						fase = jogo(fase); 
 						if(hwnd != NULL) 
 							MoveWindow(hwnd ,150,50 ,590, 425, TRUE); 
 						break;
@@ -74,13 +69,12 @@ int main()
 	return 0;
 }
 
-int jogo(uchar *faseInicial)
+int jogo(uchar fase)
 {
 	char cenario[25][25];	
 	agente jogador, inimigo, inimigo2;
 	char direcao;
 	uchar qtdAneis;
-	uchar fase = *faseInicial;
 	uchar posAnel[2];
 	uchar posAnel2[2];
 	uchar tempo = 0;
@@ -170,7 +164,7 @@ int jogo(uchar *faseInicial)
 				if(direcao == 27)										// se o usuario deigitar ESC o jogo volta ao menu
 				{
 					moverCursor(1,1,false);							// so pra melhorar a transicao da troca de tela 
-					return 0;				
+					return fase;				
 				}
 			}												
 			if(gelo)			// se o inimigo estiver comgelado, tem que ser contado o tempo de congelamento
@@ -207,7 +201,6 @@ int jogo(uchar *faseInicial)
 		{
 			animacaoVitoria(fase);
 			fase++;	
-			*faseInicial++;
 			if(fase == 4)
 			{
 				system("cls");
@@ -239,8 +232,7 @@ int jogo(uchar *faseInicial)
 	system("cls");
 	printf("Obigado por jogar :)\nDesenvolvido por Yure Matias\n\n");
 	Sleep(2000);
-	system("taskkill /f /fi \"windowtitle eq Manual\"");		// fechar o manual apos termino do jogo
-	return 0;
+	return fase;
 }
 
 void creditos()
@@ -257,7 +249,6 @@ void creditos()
 	printf("\n\n Acesse: ");
 	printf(AZUL "https://github.com/Yurematias/Ringo-Game" CINZA);
 	printf("\n\nPressione ESC para voltar");
-	
 	while(getch() != 27); // 27 eh o numero correspondente ao ESC da tabela ASCII
 }	
 
@@ -266,6 +257,7 @@ void manual()
 	system("cls");
 	printf("CONTROLES:\n");
 	printf("\n W - Cima\n S - Baixo\n D - Direita\n A - Esquerda");
+	printf("\n Setas - Movimentacao com um maior controle");
 	printf("\n ESC - Voltar ao menu");
 	printf("\n\nOBJETIVO:\n");
 	printf("\n Capture todas as moedas\n para ir para o proximo nivel.\n Nao seja pego pelo inimigo.");
@@ -286,12 +278,12 @@ void manual()
 void mostrarMenu(char opcao)
 {
 	printf("\n\n\n\t\t  ");
-	(opcao == 1) ? printf(FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<=") : printf(" INICIAR JOGO  ");
+	printf("%s",(opcao == 1) ? FUNDOBRANCO PRETO " INICIAR JOGO " FUNDOPRETO CINZA " <<=" : " INICIAR JOGO  ");
 	printf("\n\n\t\t  ");
-	(opcao == 2) ? printf(FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<=") : printf(" MANUAL  ");
+	printf("%s",(opcao == 2) ? FUNDOBRANCO PRETO " MANUAL " FUNDOPRETO CINZA " <<=" : " MANUAL  ");
 	printf("\n\n\t\t  ");
-	(opcao == 3) ? printf(FUNDOBRANCO PRETO " CREDITOS " FUNDOPRETO CINZA " <<=") : printf(" CREDITOS  ");
+	printf("%s",(opcao == 3) ? FUNDOBRANCO PRETO " CREDITOS " FUNDOPRETO CINZA " <<=" : " CREDITOS  ");
 	printf("\n\n\t\t  ");
-	(opcao == 4) ? printf(FUNDOBRANCO PRETO " SAIR " FUNDOPRETO CINZA " <<=") : printf(" SAIR  ");
+	printf("%s",(opcao == 4) ? FUNDOBRANCO PRETO " SAIR " FUNDOPRETO CINZA " <<=" : " SAIR  ");
 	printf("\n\n\n\n\t\t ");
 }

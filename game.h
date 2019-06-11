@@ -28,7 +28,11 @@ char opcaoMenu(char tecla, uchar op)
 			break;
 		case 'w':
 			if(op > 1)
-				op--;
+				op--;		
+			break;
+		case 72:		// Seta para cima ASCII
+			if(op > 1)
+				op--;		
 			break;
 		case 'S':
 			if(op < 4)
@@ -37,6 +41,10 @@ char opcaoMenu(char tecla, uchar op)
 		case 's':
 			if(op < 4)
 				op++;
+			break;
+		case 80:		// Seta para baixo ASCII
+			if(op < 4)
+				op++;		
 	}
 	return op;		
 }
@@ -45,7 +53,7 @@ char opcaoMenu(char tecla, uchar op)
 void apresentacao()		// somente estetica 
 {
 	printf(FUNDOBRANCO PRETO 
-    "\n\t\t                                         "	
+   "\n\t\t                                         "	
 	"\n\t\t %c%c%c%c%c  %c  %c%c     %c   %c%c%c%c%c%c   %c%c%c%c%c%c%c%c%c "
 			"\n\t\t %c   %c  %c  %c%c     %c  %c         %c       %c "
 			"\n\t\t %c   %c  %c  %c %c    %c %c          %c       %c "
@@ -111,7 +119,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 		
 	else			// se nao for teleteransportar a movimentacao ocorre normalmente 
 	{
-		switch(direcao)	// apenas para aceitar caps lock
+		switch(direcao)	// apenas para aceitar caps lock e as setas 
 		{
 			case 'W':
 				direcao = 'w';
@@ -125,6 +133,17 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 			case 'S':
 				direcao = 's';
 				break;			
+			case 72:			// SETA PARA CIMA (TABELA ASCII)
+				direcao = 'w';
+				break;
+			case 75:			// SETA PARA ESQUERDA (TABELA ASCII)
+				direcao = 'a';
+				break;
+			case 77:			// SETA PARA DIREITA (TABELA ASCII)
+				direcao = 'd';
+				break;
+			case 80:			// SETA PARA BAIXO (TABELA ASCII)
+				direcao = 's';	 			
 		}
 		switch(direcao)
 		{
@@ -480,7 +499,7 @@ void montarCenario(uchar fase, char cenario[25][25], agente jogador)
 // funcao que faz a animacao de derrota do jogo
 void animacaoDerrota()	
 {	
-	uchar tempo = 100;    
+	const uchar tempo = 100;    
 	printf("G");
 	Sleep(tempo);		 
 	printf("A");
@@ -509,7 +528,7 @@ void animacaoDerrota()
 // funcao que faz a animacao de vitoria do jogo
 void animacaoVitoria(uchar fase)	
 {
-	uchar tempo = 100;
+	const uchar tempo = 100;
 	printf("F");
 	Sleep(tempo);		 
 	printf("A");
