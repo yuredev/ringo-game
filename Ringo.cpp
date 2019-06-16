@@ -3,10 +3,7 @@
 #define ESPERA 110
 
 /* 
-Observacoes: 
-* Somente compativel com o Windows 10
-* para que o manual de jogo seja apresentado, este jogo deve ser iniciado atravÃ©s 
-da execucao do programa launchCapman.exe presente na mesma pasta. 
+Observacoes: Somente compativel com o Windows 10
 */
 
 void mostrarMenu(char opcao);
@@ -16,7 +13,7 @@ int jogo(uchar fase);
 
 int main()
 {
-	uchar fase = 1;
+	uchar fase = 3;
 	uchar opcao = 1;
 	char tecla;
 	printf("\n\n\n\t   ");

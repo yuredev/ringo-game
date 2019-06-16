@@ -49,7 +49,7 @@ char opcaoMenu(char tecla, uchar op)
 	return op;		
 }
 
-// funcao que mostra o nome do jogo no mapa, apenas para a estetica do jogo 
+// funcao que mostra o nome do jogo no menu principal, apenas para a estetica do jogo 
 void apresentacao()		// somente estetica 
 {
 	printf(FUNDOBRANCO PRETO 
@@ -112,6 +112,7 @@ agente teletransporte(agente jogador, char cenario[25][25])
 // funcao que realiza as mudancas nas posicoes do jogador
 agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gelo)	// mexe o jogador no cenario
 {
+	// apagar o jogador da tela 
 	moverCursor(jogador.linha, jogador.coluna, true);
 	printf(" ");	
 	if(cenario[jogador.linha][jogador.coluna] == 't')	// teletransporte
@@ -173,6 +174,7 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 		cenario[jogador.linha][jogador.coluna] = '0';
 	}
 	
+	// mostrar o jogador ja nas novas posicoes 
 	moverCursor(jogador.linha, jogador.coluna, true);
 	printf("%c",254);
 	moverCursor(25, 0,true);
@@ -184,69 +186,64 @@ agente acaoInimigo(agente inimigo, agente jogador, char cenario[25][25], uchar f
 {
 	char direcao;
 	
+	// apagar o inimigo da tela no cenario
 	moverCursor(inimigo.linha, inimigo.coluna, true);
 	printf("  ");	
 	
-	// verificacao parar desvio de paredes, a primeira parte eh apenas para na fase 3 para o jogador nao desviar da parede que preenche a tela inteira.
-	if(!(fase == 3 && (inimigo.linha == 6 || inimigo.linha)) && !strcmp(inimigo.categoria,"inimigo") && ((inimigo.linha < jogador.linha && cenario[inimigo.linha + 1][inimigo.coluna] == 'p') || (inimigo.linha > jogador.linha && cenario[inimigo.linha - 1][inimigo.coluna] == 'p')))
+	// condicao gigante para verificacao para desvio de paredes. (obs: separei o if em 3 partes para melhor compreensao, ou talvez ne...) 
+	// a primeira parte eh para limitar para nao passar da parede que preenche a tela inteira na fase 3
+	if(!(fase == 3 && (inimigo.linha == 7 || inimigo.linha == 5)) && !strcmp(inimigo.categoria,"inimigo") && 
+	((inimigo.linha < jogador.linha && cenario[inimigo.linha + 1][inimigo.coluna] == 'p') || // se tiver uma parede abaixo do inimigo
+	(inimigo.linha > jogador.linha && cenario[inimigo.linha - 1][inimigo.coluna] == 'p'))) // se tiver uma parede acima do inimigo
 	{
-		if(jogador.coluna > 12)
-			direcao = 'd';
-		else
-			direcao = 'a';
+		if(jogador.coluna > 12)	 // se o jogador estiver do lado direito do cenario	
+			direcao = 'd';		 // setei ele para desviar da parede pela direita 
+		else					 // se estiver do lado esquerdo do cenario 
+			direcao = 'a';		 // setei ele para desviar da parede pela esquerda 
 	}	
 	else 
 	if(inimigo.linha == jogador.linha)	// se o inimigo tiver na mesma linha do jogador ele move-se em linha reta 
 	{
-		if(inimigo.coluna < jogador.coluna)
-			direcao = 'd';
-		else 
-			direcao = 'a';	
+		if(inimigo.coluna < jogador.coluna)		// se o inimigo estiver a esquerda do jogador 
+			direcao = 'd';						// ele deve se movimentar a direita 
+		else 									// caso contrario ele esta a direita 
+			direcao = 'a';						// entao movimenta-se para esquerda 
 	}		 
 	else if(inimigo.coluna == jogador.coluna)    // se o inimigo tiver na mesma coluna do jogador ele move-se em linha reta 
 	{
-		if(inimigo.linha < jogador.linha)
-			direcao = 's';
-		else
-			direcao = 'w';	
+		if(inimigo.linha < jogador.linha)		// se o inimigo estiver acima do jogador
+			direcao = 's';						// ele deve se movimentar para baixo  
+		else									// caso contrario, ele esta abaixo
+			direcao = 'w';						// ele deve se movimentar para cima 
 	}
-	else if(rand() % 2 == 0)      // 50% de chance do inimigo mover-se no eixo horizontal 
-	{		
-		if(inimigo.coluna < jogador.coluna)
-			direcao = 'd';
-		else 
-			direcao = 'a';	
-	}
-	else					// 50% de chance do inimigo mover-se no eixo vertical 
-	{
-		if(inimigo.linha < jogador.linha)
-			direcao = 's';
-		else
-			direcao = 'w';	
-	}
-		
+	else if(rand() % 2 == 0)                                       // 50% de chance do inimigo mover-se no eixo horizontal 
+		direcao = (inimigo.coluna < jogador.coluna)	? 'd' : 'a';   // mexer no eixo horizontal 		
+	else					                                       // 50% de chance do inimigo mover-se no eixo vertical 
+		direcao = (inimigo.linha < jogador.linha) ? 's' : 'w';	   // mexer no eixo vertical	
+	
 	switch(direcao)
 	{
 		case 'w':
-			if(cenario[inimigo.linha-1][inimigo.coluna] != 'p')  // não ultrapassar paredes
+			if(cenario[inimigo.linha-1][inimigo.coluna] != 'p')  // limitacao para nao ultrapassar paredes
 				inimigo.linha--; 
 			break;
 		case 's':
-			if(cenario[inimigo.linha+1][inimigo.coluna] != 'p') // " "
+			if(cenario[inimigo.linha+1][inimigo.coluna] != 'p') // limitacao para nao ultrapassar paredes
 				inimigo.linha++;
 			break;
 		case 'a':
-			if(cenario[inimigo.linha][inimigo.coluna-1] != 'p')  // " "
+			if(cenario[inimigo.linha][inimigo.coluna-1] != 'p')  // limitacao para nao ultrapassar paredes
 				inimigo.coluna--;
 			break;
 		case 'd':
-			if(cenario[inimigo.linha][inimigo.coluna+1] != 'p') // " "
+			if(cenario[inimigo.linha][inimigo.coluna+1] != 'p') // limitacao para nao ultrapassar paredes
 				inimigo.coluna++;
 			break;			
 	}
 	if(cenario[inimigo.linha][inimigo.coluna] == 'g')       // se o inimigo passar por cima do gelo, o gelo desaparece 
 		cenario[inimigo.linha][inimigo.coluna] = '0';
 	
+	// printar o inimigo na nova posicao do cenario
 	moverCursor(inimigo.linha, inimigo.coluna, true);
 	printf(VERMELHO"%c" CINZA, 254);
 	moverCursor(25, 0,true);
@@ -275,14 +272,14 @@ int gerarAneis(char cenario[25][25], uchar fase)		// gera os Aneis da fase
 	{
 		do
 		{
-			l = rand() % 25;
+			l = rand() % 25;		  
 			c = rand() % 25;
-			if(cenario[l][c] == '0')
+			if(cenario[l][c] == '0') // verifica se esta disponivel a posicao para colocar um anel  
 			{
 				cenario[l][c] = 'a';
 				break;
 			}
-		}while(cenario[l][c] != '0');
+		}while(cenario[l][c] != '0');	// repita ate que as coordenadas geradas para o anel estejam disponiveis 
 	}
 	return qtdAneisFase;		
 }
@@ -341,10 +338,10 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 {
 	uchar i,j;
 	printf("\n\n\t");
-	writeLine(52);
+	writeLine(52);											// parede superior do cenario 
 	for(i = 0; i < 25; i++)
 	{
-		printf("\t%c",219);									// limite do cenario, parede do Ã­nicio
+		printf("\t%c",219);									// limite do cenario, parede vertical do inicio 
 		for(j = 0; j < 25; j++)
 		{
 			if(cenario[i][j] == 't')					//mostrar teletransporte
@@ -364,11 +361,11 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 			else if(cenario[i][j] == 'a')					//mostrar aneis
 				printf(AMARELO "o " CINZA);	
 		}
-		printf("%c",219);							// limite do cenario, parede do fim
+		printf("%c",219);							// limite do cenario, parede vertical do fim
 		printf("\n");
 	}
 	printf("\t");
-	writeLine(52);
+	writeLine(52);									// parede inferior do cenario 
 	printf("\n\t");						
 }
 
@@ -376,14 +373,19 @@ void mostrarJogo(char cenario[25][25], agente jogador, agente inimigo, agente in
 bool wasTouched(agente jogador, agente inimigo, agente inimigo2)    
 {
 	bool touch = false; 
+	// verifica se o inimigo 1 ou 2 esta na mesma cordenada do jogador 
 	if((jogador.linha == inimigo.linha && jogador.coluna == inimigo.coluna) || (jogador.linha == inimigo2.linha && jogador.coluna == inimigo2.coluna))
 		touch = true;
+	// verifica se o inimigo 1 ou 2 esta a um bloco a direita do jogador
 	else if((jogador.linha-1 == inimigo.linha && jogador.coluna == inimigo.coluna) || (jogador.linha-1 == inimigo2.linha && jogador.coluna == inimigo2.coluna))
 		touch = true;
+	// verifica se o inimigo 1 ou 2 esta a um bloco a esquerda do jogador 	
 	else if((jogador.linha+1 == inimigo.linha && jogador.coluna == inimigo.coluna) || (jogador.linha+1 == inimigo2.linha && jogador.coluna == inimigo2.coluna))
 		touch = true;
+	// verifica se o inimigo 1 ou 2 esta um bloco acima do jogador	
 	else if((jogador.linha == inimigo.linha && jogador.coluna-1 == inimigo.coluna) || (jogador.linha == inimigo2.linha && jogador.coluna-1 == inimigo2.coluna))
 		touch = true;
+	// verifica se o inimigo 1 ou 2 esta a um bloco abaixo do jogador 	
 	else if((jogador.linha == inimigo.linha && jogador.coluna+1 == inimigo.coluna) || (jogador.linha == inimigo2.linha && jogador.coluna+1 == inimigo2.coluna))	
 		touch = true;
 	return touch;
