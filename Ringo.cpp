@@ -1,6 +1,6 @@
 #include "game.h"
 
-#define ESPERA 110
+#define ESPERA 120
 
 /* 
 Observacoes: Somente compativel com o Windows 10
@@ -13,22 +13,20 @@ int jogo(uchar fase);
 
 int main()
 {
-	uchar fase = 3;
+	uchar fase = 1;
 	uchar opcao = 1;
-	char tecla;
-	printf("\n\n\n\t   ");
-	writeLine(51);
-	printf("\n");
+	char tecla;	
 	SetConsoleTitle("*** R I N G O ***");
 	HWND hwnd = GetConsoleWindow();					
 	if(hwnd != NULL) 
-		MoveWindow(hwnd ,150,50 ,590, 425, TRUE); 
+		MoveWindow(hwnd ,150,50 ,590, 425, TRUE);  // ajustar tamanho da janela 
 	do
 	{
-		if(kbhit())
+		if(kbhit()) 					// se alguma coisa foi teclada 
 		{
 			tecla = getch();
-			if(tecla == 13)								// se o usuário teclar enter 
+			if(tecla == 13)	           // se o usuário teclar enter 
+			{
 				switch(opcao)
 				{
 					case 1: 
@@ -45,25 +43,25 @@ int main()
 						MoveWindow(hwnd ,150,50 ,590, 425, TRUE); 
 						break;
 					case 4: 
+						system("cls");
+						printf("Jogo encerrado, obrigado por jogar :)\n\n");
+						printf("\n\n");
 						return 0;	
 				}
+			}
 			else									// se a tecla digitada nao for enter eh pq talvez foi alguma opcao do menu
 				opcao = opcaoMenu(tecla, opcao);
 		}
 		system("cls");
-		apresentacao();
+		letreiro();
 		mostrarMenu(opcao);							// apenas mostra o menu de acordo com as opcoes 
 		printf(AMARELO"Navegacao: "CINZA);
 		printf("\n\t\t ");
 		printf(AMARELO"W - cima, S - baixo, Enter - confirmar" CINZA);
 		moverCursor(20,1,false);
-		if(opcao != 13)
-		{
-			fflush(stdin);
-			while(!kbhit());
-		}
+		setbuf(stdin,NULL);
+		while(!kbhit());			                // para a tela nao ficar piscando
 	}while(1);
-	return 0;
 }
 
 int jogo(uchar fase)
@@ -187,7 +185,6 @@ int jogo(uchar fase)
 				gelo = false;	
 				tempo = 0;
 			}
-		
 			Sleep(ESPERA);
 		}while(qtdAneis > 0);
 		putchar('\a');

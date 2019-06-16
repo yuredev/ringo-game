@@ -20,37 +20,15 @@ struct agente
 // funcao que para manipular o menu principal do jogo 
 char opcaoMenu(char tecla, uchar op)
 {
-	switch(tecla)
-	{
-		case 'W':
-			if(op > 1)
-				op--;
-			break;
-		case 'w':
-			if(op > 1)
-				op--;		
-			break;
-		case 72:		// Seta para cima ASCII
-			if(op > 1)
-				op--;		
-			break;
-		case 'S':
-			if(op < 4)
-				op++;
-			break;
-		case 's':
-			if(op < 4)
-				op++;
-			break;
-		case 80:		// Seta para baixo ASCII
-			if(op < 4)
-				op++;		
-	}
+	if((tecla == 'W' || tecla == 'w' || tecla == 72) && op > 1)
+		op--;
+	else if((tecla == 'S' || tecla == 's' || tecla == 80) && op < 4)
+		op++;
 	return op;		
 }
 
 // funcao que mostra o nome do jogo no menu principal, apenas para a estetica do jogo 
-void apresentacao()		// somente estetica 
+void letreiro()		// somente estetica 
 {
 	printf(FUNDOBRANCO PRETO 
    "\n\t\t                                         "	
@@ -120,49 +98,33 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 		
 	else			// se nao for teleteransportar a movimentacao ocorre normalmente 
 	{
-		switch(direcao)	// apenas para aceitar caps lock e as setas 
-		{
-			case 'W':
-				direcao = 'w';
-				break;	
-			case 'A':
-				direcao = 'a';
-				break;		
-			case 'D':
-				direcao = 'd';
-				break;	
-			case 'S':
-				direcao = 's';
-				break;			
-			case 72:			// SETA PARA CIMA (TABELA ASCII)
-				direcao = 'w';
-				break;
-			case 75:			// SETA PARA ESQUERDA (TABELA ASCII)
-				direcao = 'a';
-				break;
-			case 77:			// SETA PARA DIREITA (TABELA ASCII)
-				direcao = 'd';
-				break;
-			case 80:			// SETA PARA BAIXO (TABELA ASCII)
-				direcao = 's';	 			
-		}
+		if(direcao == 'W' || direcao == 72)	// CIMA
+			direcao = 'w';
+		else if(direcao == 'A' || direcao == 75) // ESQUERDA
+			direcao = 'a';
+		else if(direcao == 'S' || direcao == 80) // BAIXO 
+			direcao = 's';
+		else if(direcao == 'D' || direcao == 77) // DIREITA
+			direcao = 'd';	
+			
 		switch(direcao)
 		{
+			// o jogador so mexe se a proxima casa nao houver paredes. isso se aplica a todos os cases
 			case 'w':
-				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') // o jogador so mexe se a proxima casa nao houver paredes. isso se aplica aos outros cases
+				if(jogador.linha > 0 && cenario[jogador.linha - 1][jogador.coluna] != 'p') 
 					jogador.linha--;
 				break;	
 			case 'a':
 				if(jogador.coluna > 0 && cenario[jogador.linha][jogador.coluna - 1] != 'p')
 					jogador.coluna--;
 				break;	
-			case 'd':
-				if(jogador.coluna < 24 && cenario[jogador.linha][jogador.coluna + 1] != 'p')
-					jogador.coluna++;
-				break;	
 			case 's':
 				if(jogador.linha < 24 && cenario[jogador.linha + 1][jogador.coluna] != 'p')
 					jogador.linha++;
+				break;	
+			case 'd':
+				if(jogador.coluna < 24 && cenario[jogador.linha][jogador.coluna + 1] != 'p')
+					jogador.coluna++;
 				break;		
 		}	
 	}
@@ -170,15 +132,15 @@ agente acaoJogador(char direcao, agente jogador, char cenario[25][25], bool *gel
 	// verifica se o jogador pegou o gelo e se sim ele seta o valor de gelo para verdadeiro
 	if(cenario[jogador.linha][jogador.coluna] == 'g')
 	{
-		*gelo = true;
-		cenario[jogador.linha][jogador.coluna] = '0';
+		*gelo = true;									// setar o gelo para true, isso congela o inimigo
+		cenario[jogador.linha][jogador.coluna] = '0';   // sumir com o gelo, apos captura
 	}
 	
 	// mostrar o jogador ja nas novas posicoes 
 	moverCursor(jogador.linha, jogador.coluna, true);
 	printf("%c",254);
 	moverCursor(25, 0,true);
-	return jogador;	
+	return jogador;				// retornar jogador ja com as novas posicoes 
 }
 
 // funcao que mexe o inimigo no cenario 
@@ -391,7 +353,7 @@ bool wasTouched(agente jogador, agente inimigo, agente inimigo2)
 	return touch;
 }
 
-// funcao que constroi uma parede horizontal no cenario do jogo 
+// funcao que constroi uma parede horizontal na matriz do cenario do jogo 
 void fazerParede(uchar linha, uchar inicioParede, uchar fimParede, char cenario[25][25])	
 {
 	for(; inicioParede <= fimParede; inicioParede++)
