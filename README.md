@@ -10,8 +10,9 @@ Capturando todos os aneis é possível passar de fase. O jogo atualmente conta c
 
 ### Para jogar execute o Ringo.exe presente na pasta raiz deste repositório
 
-## Menu
-![Menu](ImagesReadMe/RingoMenu.PNG)
-<br />
 ## Tela de Jogo 
 ![TelaDeJogo](ImagesReadMe/RingoJogo.PNG)
+<br />
+## Menu
+![Menu](ImagesReadMe/RingoMenu.PNG)
+
