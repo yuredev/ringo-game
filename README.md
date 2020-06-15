@@ -1,7 +1,7 @@
 # Ringo
 ### Jogo de labirinto com inspiração no Pacman da Namco
 
-O Jogo foi desenvolvido utilizando apenas a linguagem C sem interface gráfica ou utilização de qualquer biblioteca ou framework.
+O Jogo foi desenvolvido para o terminal do Windows, utilizando apenas a linguagem C, sem a utilização de qualquer biblioteca ou framework.
 
 Desenvolvido como trabalho final da disciplica de Lógica Computacional e Algoritmos do primeiro periódo da graduação de Análise e Desenvolvimento de Sistemas na UFRN. 
 
